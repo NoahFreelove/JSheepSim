@@ -7,6 +7,7 @@ import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.JEngine.Utility.About.JAppInfo;
 import com.JEngine.Utility.Settings.EnginePrefs;
+import com.jsheepsim.Core.Simulator;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -17,14 +18,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         setEnginePrefs();
-        JScene scene = new JScene(500, "Sim1");
-        JWindow window = new JWindow(scene, 1,"SheepSim",stage);
-
-        JCamera sceneCamera = new JCamera(new Vector3(0,0,0), window, scene, null, new JIdentity("Main Camera", "camera"));
+        Simulator sim1 = new Simulator("Sim 1");
+        JWindow window = new JWindow(sim1.getScene(), 1,"SheepSim",stage);
+        window.setTargetFPS(30);
+        JCamera sceneCamera = new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
 
         window.setBackgroundColor(Color.web("#006400"));
 
-        window.start();
     }
 
     public static void main(String[] args) {
