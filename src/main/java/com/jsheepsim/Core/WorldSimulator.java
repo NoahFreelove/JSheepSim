@@ -80,15 +80,19 @@ public class WorldSimulator {
     public boolean removeAnimal(Animal animal) {
         return worldData.removeAnimal(animal);
     }
+
     public boolean moveAnimal(Animal animal, int x, int y) {
         return worldData.moveAnimal(animal, x, y);
     }
+
     public boolean isOccupied(int x, int y) {
         return worldData.isOccupied(x, y);
     }
+
     public Coord getAvailableSpotInRange(int x, int y, int range) {
         return worldData.getAvailableSpotInRange(x, y, range);
     }
+
     public Animal[] getAnimalsInRange(int x, int y, int range) {
         return worldData.getAnimalsInRange(x, y, range);
     }
