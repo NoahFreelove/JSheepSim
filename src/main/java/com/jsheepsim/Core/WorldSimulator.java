@@ -1,17 +1,24 @@
 package com.jsheepsim.Core;
 
 import com.JEngine.Game.Visual.Scenes.JScene;
+import com.JEngine.Game.Visual.Scenes.JSceneManager;
+import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
 
 public class WorldSimulator {
-    private JScene scene;
-    private WorldData worldData;
-    private final Thread simulationThread;
+    private JScene scene; // Holds the Images and objects of the world
+    private WorldData worldData; // Handles the data of the world including movement
+
+    private final Thread simulationThread; // Thread that runs the simulation
+    private boolean isRunning = false; // Whether the simulation is running or not
+
+    private final int simSpeed = 1; // Speed of the simulation
 
     // Grid is 16x16, 32x32 pixels per square
-    public WorldSimulator(String sceneName) {
+    public WorldSimulator(String sceneName, long worldSeed) {
         this.scene = new JScene(500, sceneName);
+        worldData = new WorldData(16, 16, 64, this);
         simulationThread = new Thread(this::simulationUpdate);
-        simulationThread.start();
+        generateAnimals(worldSeed);
     }
 
     public JScene getScene() {
@@ -23,18 +30,38 @@ public class WorldSimulator {
     }
 
     private void simulationUpdate(){
-        while(true){
+        while(isRunning){
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000/simSpeed);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
             for ( Animal[] animalArr : worldData.getAnimals() ) {
                 for ( Animal animal : animalArr ) {
+                    if(animal!=null)
                         animal.simUpdate();
                 }
             }
+            Thing.LogInfo("Simulation Update");
         }
+    }
+
+    public void startSimulation(){
+        if(isRunning)
+            return;
+        isRunning = true;
+        try {
+            simulationThread.interrupt();
+        }catch (Exception e){
+            //ignore
+        }
+        simulationThread.start();
+        JSceneManager.getWindow().resume();
+    }
+
+    public void pauseSimulation(){
+        isRunning = false;
+        JSceneManager.getWindow().pause();
     }
 
 
@@ -64,5 +91,9 @@ public class WorldSimulator {
     }
     public Animal[] getAnimalsInRange(int x, int y, int range) {
         return worldData.getAnimalsInRange(x, y, range);
+    }
+
+    public WorldData getWorldData() {
+        return worldData;
     }
 }

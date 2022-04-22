@@ -12,7 +12,7 @@ import java.io.File;
 
 public class Sheep extends Animal implements IAttackable {
     public Sheep(Coord arrPos, WorldSimulator worldSimulator, String name) {
-        super(Transform.simpleTransform(arrPos.x, arrPos.y, 2), new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"));
+        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"));
     }
 
     @Override

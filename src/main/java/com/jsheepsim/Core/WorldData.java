@@ -52,7 +52,7 @@ public class WorldData {
     public boolean addAnimal(Animal animal) {
         if (animal.getX() < xSize && animal.getY() < ySize) {
             animals[animal.getX()][animal.getY()] = animal;
-            JSceneManager.getActiveScene().add(animal);
+            worldSimulator.getScene().add(animal);
             return true;
         }
         return false;
@@ -61,7 +61,7 @@ public class WorldData {
     public boolean removeAnimal(Animal animal) {
         if (animal.getX() < xSize && animal.getY() < ySize) {
             animals[animal.getX()][animal.getY()] = null;
-            JSceneManager.getActiveScene().remove(animal);
+            worldSimulator.getScene().remove(animal);
             return true;
         }
         return false;

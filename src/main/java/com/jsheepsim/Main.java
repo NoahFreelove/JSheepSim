@@ -16,13 +16,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         setEnginePrefs();
-        WorldSimulator sim1 = new WorldSimulator("Sim 1");
+        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0);
         JWindow window = new JWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(30);
-        JCamera sceneCamera = new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
+        new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
 
         window.setBackgroundColor(Color.web("#006400"));
-
+        sim1.startSimulation();
     }
 
     public static void main(String[] args) {
@@ -33,7 +33,7 @@ public class Main extends Application {
     {
         EnginePrefs.aggressiveGC = false;
         EnginePrefs.logDebug = false;
-        EnginePrefs.logExtra = false;
+        EnginePrefs.logExtra = true;
         EnginePrefs.logImportant = true;
         EnginePrefs.logInfo = true;
 

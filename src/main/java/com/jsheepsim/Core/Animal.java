@@ -12,13 +12,16 @@ public class Animal extends Entity {
     private boolean hasEaten = false;
     public int daysToLive = 30;
 
-    public Animal(Transform transform, JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
-        super(transform, jIdentity, arrPos,wmRef, imagePath);
+    public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
+        super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 2), jIdentity, arrPos,wmRef, imagePath);
     }
 
     @Override
     public void Update(){
+    }
 
+    @Override
+    public void simUpdate(){
         if(daysToLive > 0) {
             daysToLive--;
             if (daysToLive == 0) {
@@ -26,6 +29,7 @@ public class Animal extends Entity {
             }
         }
     }
+
 
     protected void die()
     {

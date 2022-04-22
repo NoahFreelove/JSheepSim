@@ -11,6 +11,6 @@ import java.io.File;
 
 public class Wolf extends Animal {
     public Wolf(Coord arrPos, WorldSimulator worldSimulator, String name) {
-        super(Transform.simpleTransform(arrPos.x, arrPos.y, 2), new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"));
+        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"));
     }
 }
