@@ -3,6 +3,7 @@ package com.jsheepsim.Core;
 import com.JEngine.Game.PlayersAndPawns.JPawn;
 import com.JEngine.PrimitiveTypes.JImage;
 import com.JEngine.PrimitiveTypes.Position.Transform;
+import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 
 import java.io.File;
@@ -10,12 +11,12 @@ import java.io.File;
 public class Entity extends JPawn {
     private String name;
     private Coord pos;
-    protected File image = null;
-
+    protected File image;
+    protected boolean hasUpdated;
     protected final WorldSimulator worldSimulator;
 
     public Entity(Transform transform, JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
-        super(transform, new JImage(imagePath.getAbsolutePath()), jIdentity);
+        super(transform, new JImage(imagePath.getAbsolutePath(),wmRef.getWorldData().getTileSize(),wmRef.getWorldData().getTileSize()), jIdentity);
         this.name = jIdentity.getName();
         this.pos = arrPos;
         this.worldSimulator = wmRef;
@@ -24,6 +25,9 @@ public class Entity extends JPawn {
 
     public void simUpdate(){
 
+    }
+    @Override
+    public void Update(){
     }
 
     public String getName() {
@@ -63,5 +67,6 @@ public class Entity extends JPawn {
     public WorldSimulator getWorldSimulator() {
         return worldSimulator;
     }
+
 
 }

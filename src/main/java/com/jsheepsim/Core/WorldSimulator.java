@@ -16,9 +16,10 @@ public class WorldSimulator {
     // Grid is 16x16, 32x32 pixels per square
     public WorldSimulator(String sceneName, long worldSeed) {
         this.scene = new JScene(500, sceneName);
-        worldData = new WorldData(16, 16, 64, this);
+        worldData = new WorldData(16, 16, 32, this);
         simulationThread = new Thread(this::simulationUpdate);
         generateAnimals(worldSeed);
+        generateGrass(worldSeed);
     }
 
     public JScene getScene() {
@@ -39,9 +40,24 @@ public class WorldSimulator {
             for ( Animal[] animalArr : worldData.getAnimals() ) {
                 for ( Animal animal : animalArr ) {
                     if(animal!=null)
-                        animal.simUpdate();
+                    {
+                        if(!animal.hasUpdated)
+                        {
+                            animal.simUpdate();
+                            animal.hasUpdated = true;
+                        }
+                    }
                 }
             }
+            for ( Animal[] animalArr : worldData.getAnimals() ) {
+                for ( Animal animal : animalArr ) {
+                    if(animal!=null)
+                    {
+                        animal.hasUpdated = false;
+                    }
+                }
+            }
+
             Thing.LogInfo("Simulation Update");
         }
     }
@@ -73,6 +89,8 @@ public class WorldSimulator {
         worldData.generateAnimals(seed);
     }
 
+    public void generateGrass(long seed){ worldData.generateGrass(seed);}
+
     public boolean addAnimal(Animal animal) {
         return worldData.addAnimal(animal);
     }
@@ -99,5 +117,9 @@ public class WorldSimulator {
 
     public WorldData getWorldData() {
         return worldData;
+    }
+
+    public boolean removeGrass(int x, int y) {
+        return worldData.removeGrass(x, y);
     }
 }

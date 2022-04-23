@@ -18,7 +18,7 @@ public class Main extends Application {
         setEnginePrefs();
         WorldSimulator sim1 = new WorldSimulator("Sim 1", 0);
         JWindow window = new JWindow(sim1.getScene(), 1,"SheepSim",stage);
-        window.setTargetFPS(30);
+        window.setTargetFPS(60);
         new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
 
         window.setBackgroundColor(Color.web("#006400"));

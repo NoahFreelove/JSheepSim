@@ -1,6 +1,5 @@
 package com.jsheepsim;
 
-import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.jsheepsim.Core.Animal;
 import com.jsheepsim.Core.Coord;
@@ -24,9 +23,12 @@ public class Sheep extends Animal implements IAttackable, IBreedable {
     }
 
     @Override
-    public void breed(Animal animal) {
-        hasEaten = false;
-        worldSimulator.addAnimal(new Sheep(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child"));
+    public Animal breed(Animal animal) {
+        setHasEaten(false);
+        Sheep s = new Sheep(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child");
+        worldSimulator.addAnimal(s);
+        child = s;
+        return s;
     }
 
 }
