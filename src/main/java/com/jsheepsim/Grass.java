@@ -10,13 +10,13 @@ import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;
 
-public class Grass extends Entity implements IAttackable {
+public class Grass extends Entity {
     public Grass(Coord arrPos, WorldSimulator wmRef) {
         super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 0), new JIdentity("Grass", "entity"), arrPos, wmRef, new File("images/grass.png"));
     }
 
-    @Override
-    public void attacked(Entity entity) {
+    public void eatGrass() {
         getWorldSimulator().removeGrass(getX(),getY());
+        worldSimulator.getScene().remove(this);
     }
 }

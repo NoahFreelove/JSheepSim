@@ -3,6 +3,7 @@ package com.jsheepsim.Core;
 import com.JEngine.Game.Visual.Scenes.JScene;
 import com.JEngine.Game.Visual.Scenes.JSceneManager;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
+import com.jsheepsim.Grass;
 
 public class WorldSimulator {
     private JScene scene; // Holds the Images and objects of the world
@@ -113,6 +114,9 @@ public class WorldSimulator {
 
     public Animal[] getAnimalsInRange(int x, int y, int range) {
         return worldData.getAnimalsInRange(x, y, range);
+    }
+    public Grass[] getGrassInRange(int x, int y, int range) {
+        return worldData.getGrassInRange(x, y, range);
     }
 
     public WorldData getWorldData() {

@@ -4,9 +4,9 @@ import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.JEngine.Utility.JMath;
-import com.JEngine.Utility.Misc.FPSCounter;
 import com.jsheepsim.Core.Interfaces.IBreedable;
 import com.jsheepsim.Core.Interfaces.IHunter;
+import com.jsheepsim.Sheep;
 
 import java.io.File;
 
@@ -50,7 +50,7 @@ public class Animal extends Entity {
             }
         }
         // If they have eaten they have the possibility to breed, if not just move
-        if(isHasEaten())
+        if(hasEaten())
         {
             if(!lookForMate())
             {
@@ -70,11 +70,15 @@ public class Animal extends Entity {
                     updateTargetPosition();
                     return;
                 }
-                // if they could hunt, don't move this day
+                // If they could hunt, don't move this day
                 updateTargetPosition();
                 return;
             }
-            // if they aren't a hunter, move randomly
+            if(this instanceof Sheep sheep)
+            {
+                sheep.lookForGrass();
+            }
+            // If they aren't a hunter, move randomly
             randomMove();
             updateTargetPosition();
         }
@@ -112,7 +116,7 @@ public class Animal extends Entity {
 
     protected boolean lookForMate()
     {
-        if(!isHasEaten())
+        if(!hasEaten())
             return false;
 
         for (Animal a: worldSimulator.getAnimalsInRange(getPos().x, getPos().y, 1)){
@@ -121,7 +125,7 @@ public class Animal extends Entity {
 
             if(a.getClass() == getClass() && a instanceof IBreedable b)
             {
-                if(a.isHasEaten())
+                if(a.hasEaten())
                 {
                     // Parents cannot breed with their children
                     if((a.child != this && child != a) || child == null)
@@ -143,7 +147,7 @@ public class Animal extends Entity {
         return false;
     }
 
-    public boolean isHasEaten() {
+    public boolean hasEaten() {
         return hasEaten;
     }
 

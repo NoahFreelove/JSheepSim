@@ -145,6 +145,22 @@ public class WorldData {
         return animalsInRange;
     }
 
+    public Grass[] getGrassInRange(int x, int y, int range) {
+        Grass[] grassInRange = new Grass[xSize*ySize];
+        int index = 0;
+        for(int i = x - range; i <= x + range; i++) {
+            for(int j = y - range; j <= y + range; j++) {
+                if(i >= 0 && j >= 0 && i < xSize && j < ySize) {
+                    if(isOccupied(i,j)) {
+                        grassInRange[index] = grass[i][j];
+                        index++;
+                    }
+                }
+            }
+        }
+        return grassInRange;
+    }
+
     public void generateAnimals(long seed)
     {
         Random random = new Random(seed);

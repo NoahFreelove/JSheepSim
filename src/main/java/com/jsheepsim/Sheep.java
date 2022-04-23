@@ -31,4 +31,19 @@ public class Sheep extends Animal implements IAttackable, IBreedable {
         return s;
     }
 
+    public void lookForGrass(){
+        if(!hasEaten()){
+            for (Grass g: worldSimulator.getGrassInRange(getX(), getY(), 1)){
+                if(g!=null){
+                    g.eatGrass();
+                    setHasEaten(true);
+                    if(!worldSimulator.isOccupied(g.getX(), g.getY())){
+                        moveAbsolute(g.getX(),g.getY());
+                        System.out.println("Sheep ate grass");
+                    }
+                }
+            }
+        }
+    }
+
 }
