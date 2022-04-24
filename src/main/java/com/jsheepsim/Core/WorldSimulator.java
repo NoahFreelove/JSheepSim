@@ -15,12 +15,13 @@ public class WorldSimulator {
     private final int simSpeed = 1; // Speed of the simulation
 
     // Grid is 16x16, 32x32 pixels per square
-    public WorldSimulator(String sceneName, long worldSeed) {
+    public WorldSimulator(String sceneName, long worldSeed, int xSize, int ySize) {
         this.scene = new JScene(500, sceneName);
-        worldData = new WorldData(16, 16, 32, this);
+        worldData = new WorldData(xSize, ySize, 32, this);
         simulationThread = new Thread(this::simulationUpdate);
         generateAnimals(worldSeed);
         generateGrass(worldSeed);
+        startThread();
     }
 
     public JScene getScene() {
@@ -32,12 +33,14 @@ public class WorldSimulator {
     }
 
     private void simulationUpdate(){
-        while(isRunning){
+        while(true){
+
+
             try {
                 Thread.sleep(1000/simSpeed);
-            } catch (InterruptedException e) {
-
-            }
+            } catch (InterruptedException ignore) {}
+            if(!isRunning)
+                continue;
             for ( Animal[] animalArr : worldData.getAnimals() ) {
                 for ( Animal animal : animalArr ) {
                     if(animal!=null)
@@ -59,20 +62,21 @@ public class WorldSimulator {
                 }
             }
 
-            Thing.LogInfo("Simulation Update");
+            Thing.LogExtra("Simulation Update");
         }
     }
 
+    public void startThread(){
+        if(!simulationThread.isAlive())
+        {
+            simulationThread.start();
+        }
+    }
     public void startSimulation(){
         if(isRunning)
             return;
         isRunning = true;
-        try {
-            simulationThread.interrupt();
-        }catch (Exception e){
-            //ignore
-        }
-        simulationThread.start();
+
         JSceneManager.getWindow().resume();
     }
 

@@ -16,8 +16,8 @@ public class Animal extends Entity {
     private boolean hasEaten = false;
     protected Animal child = null;
 
-
-    public int daysToLive = 30;
+    public int maxDaysToLive = 30;
+    public int daysToLive;
     private float animProgress;
     private Vector3 previousPosition;
     private Vector3 targetPosition;
@@ -27,6 +27,7 @@ public class Animal extends Entity {
         previousPosition = getTransform().getPosition();
         targetPosition = getTransform().getPosition();
         animProgress = 1;
+        daysToLive = maxDaysToLive;
     }
 
     @Override
@@ -45,17 +46,25 @@ public class Animal extends Entity {
         previousPosition = new Vector3(getX()*worldSimulator.getWorldData().getTileSize(), getY()*worldSimulator.getWorldData().getTileSize(), getTransform().position.z);
         if(daysToLive > 0) {
             daysToLive--;
+            if(daysToLive>maxDaysToLive-10)
+            {
+                getTransform().setScale(new Vector3(0.5f,0.5f,0.5f));
+            }
+            else
+            {
+                getTransform().setScale(new Vector3(1,1,1));
+            }
             if (daysToLive == 0) {
                 die();
             }
         }
+
         // If they have eaten they have the possibility to breed, if not just move
         if(hasEaten())
         {
             if(!lookForMate())
             {
                 randomMove();
-                updateTargetPosition();
             }
         }
         else
@@ -67,11 +76,9 @@ public class Animal extends Entity {
                 {
                     // If they can't hunt, move randomly
                     randomMove();
-                    updateTargetPosition();
                     return;
                 }
                 // If they could hunt, don't move this day
-                updateTargetPosition();
                 return;
             }
             if(this instanceof Sheep sheep)
@@ -80,7 +87,6 @@ public class Animal extends Entity {
             }
             // If they aren't a hunter, move randomly
             randomMove();
-            updateTargetPosition();
         }
     }
     private void updateTargetPosition()
@@ -96,22 +102,23 @@ public class Animal extends Entity {
     }
     protected void randomMove()
     {
-        // random up down left right
-        int rand = (int) (Math.random() * 4);
-        switch (rand) {
-            case 0 -> move(0, -1);
-            case 1 -> move(0, 1);
-            case 2 -> move(-1, 0);
-            case 3 -> move(1, 0);
+        int deltaX = (int)(Math.random()*3)-1;
+        int deltaY = (int)(Math.random()*3)-1;
+        if(deltaX == 0 && deltaY == 0)
+        {
+            return;
         }
+        move(deltaX, deltaY);
     }
     protected void move(int deltaX, int deltaY)
     {
         worldSimulator.moveAnimal(this, getX()+deltaX, getY()+deltaY);
+        updateTargetPosition();
     }
     protected void moveAbsolute(int x, int y)
     {
         worldSimulator.moveAnimal(this, x, y);
+        updateTargetPosition();
     }
 
     protected boolean lookForMate()

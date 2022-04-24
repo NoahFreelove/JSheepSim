@@ -167,12 +167,22 @@ public class WorldData {
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 int result = random.nextInt(100);
-
+                Animal a = null;
                 if(result < 10) {
-                    addAnimal(new Sheep(new Coord(i,j), worldSimulator, "sheep"));
+                    a = new Sheep(new Coord(i,j), worldSimulator, "sheep");
+                    addAnimal(a);
                 }
-                else if(result < 12) {
-                    addAnimal(new Wolf(new Coord(i,j), worldSimulator, "wolf"));
+                else if(result < 15) {
+                    a = new Wolf(new Coord(i,j), worldSimulator, "wolf");
+                    addAnimal(a);
+                }
+                else if(result < 20) {
+                    a = new Fence(new Coord(i,j), worldSimulator, "fence");
+                    addAnimal(a);
+                }
+                if(a!=null)
+                {
+                    a.daysToLive-=10;
                 }
             }
         }

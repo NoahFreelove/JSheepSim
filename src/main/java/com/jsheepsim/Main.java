@@ -16,11 +16,18 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         setEnginePrefs();
-        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0);
+        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 20,20);
         JWindow window = new JWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(60);
         new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
 
+        window.getStage().addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED, (e) -> {
+            switch (e.getCode()) {
+                case ESCAPE -> System.exit(0);
+                case F1 -> sim1.startSimulation();
+                case F2 -> sim1.pauseSimulation();
+            }
+        });
         window.setBackgroundColor(Color.web("#006400"));
         sim1.startSimulation();
     }
@@ -33,7 +40,7 @@ public class Main extends Application {
     {
         EnginePrefs.aggressiveGC = false;
         EnginePrefs.logDebug = false;
-        EnginePrefs.logExtra = true;
+        EnginePrefs.logExtra = false;
         EnginePrefs.logImportant = true;
         EnginePrefs.logInfo = true;
 
