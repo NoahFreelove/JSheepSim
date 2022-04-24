@@ -17,6 +17,9 @@ public class Console {
                 start: start world (F1)
                 stop: pause world (F2)
                 setworld: start watching a world (num keys)
+                worldstatus: print the status of a world
+                status: print the status of the current world
+                load: load a world from a file
                 """;
     public void console(){
         System.out.println("Enter a command:");
@@ -40,6 +43,8 @@ public class Console {
             case "setworld" -> changeWorldNum();
             case "worldstatus" -> worldStatus(-1);
             case "status" -> worldStatus(Main.selectedWorld);
+            case "load" -> loadWorld();
+            case "save" -> saveWorld();
         }
 
     }
@@ -74,10 +79,18 @@ public class Console {
             System.out.printf("Day:%d%n", ws.getDay());
             System.out.printf("%d animals alive%n", animalsAlive.length);
             System.out.printf("%d sheep alive%n", sheepAlive.length);
-            System.out.printf("%d wolves alive%n", wolvesAlive.length);
-            System.out.println();
-
+            System.out.printf("%d wolves alive%n%n", wolvesAlive.length);
         }
+    }
+
+    void loadWorld()
+    {
+        String fileName = getFileName();
+        Main.worlds[Main.selectedWorld].loadFromFile(fileName);
+    }
+    void saveWorld(){
+        String fileName = getFileName();
+        Main.worlds[Main.selectedWorld].saveToFile(fileName);
     }
 
     int getWorldNum(){
@@ -93,5 +106,12 @@ public class Console {
             System.out.println("Invalid world number");
             return -1;
         }
+    }
+
+    String getFileName()
+    {
+        System.out.print("Enter a file name: ");
+        return new Scanner(System.in).next();
+
     }
 }

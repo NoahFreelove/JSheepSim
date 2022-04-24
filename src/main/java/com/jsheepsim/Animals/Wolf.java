@@ -10,14 +10,14 @@ import com.jsheepsim.Core.WorldSimulator;
 import java.io.File;
 
 public class Wolf extends Animal implements IBreedable, IHunter {
-    public Wolf(Coord arrPos, WorldSimulator worldSimulator, String name) {
-        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"));
+    public Wolf(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
+        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"), 30, isChild);
     }
 
     @Override
     public Animal breed(Animal animal) {
         setHasEaten(false);
-        Wolf w = new Wolf(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child");
+        Wolf w = new Wolf(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
         child = w;
         worldSimulator.addAnimal(w);
         return w;

@@ -1,6 +1,8 @@
 package com.jsheepsim.Core;
 
 import com.JEngine.Game.Visual.Scenes.JScene;
+import com.JEngine.Game.Visual.Scenes.JSceneManager;
+import com.JEngine.PrimitiveTypes.FlipFlop;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
 import com.jsheepsim.Animals.Animal;
 import com.jsheepsim.Core.Entities.Grass;
@@ -8,7 +10,7 @@ import com.jsheepsim.Core.Entities.Grass;
 public class WorldSimulator {
     private JScene scene; // Holds the Images and objects of the world
     private WorldData worldData; // Handles the data of the world including movement
-
+    private FlipFlop grassFlip;
     private final Thread simulationThread; // Thread that runs the simulation
     private boolean isRunning = false; // Whether the simulation is running or not
 
@@ -17,10 +19,16 @@ public class WorldSimulator {
     private int day = 1; // Current day
 
     // Grid is 16x16, 32x32 pixels per square
-    public WorldSimulator(String sceneName, long worldSeed, int xSize, int ySize, double simSpeed) {
+    public WorldSimulator(String sceneName, long worldSeed, int xSize, int ySize, int tileSize, double simSpeed) {
+        if(worldSeed == 0)
+        {
+            worldSeed = System.currentTimeMillis();
+        }
+
         this.scene = new JScene(500, sceneName);
         this.simSpeed = simSpeed;
-        worldData = new WorldData(xSize, ySize, 32, this);
+        this.grassFlip = new FlipFlop();
+        worldData = new WorldData(xSize, ySize, tileSize, worldSeed, this);
         simulationThread = new Thread(this::simulationUpdate);
         generateAnimals(worldSeed);
         generateGrass(worldSeed);
@@ -45,7 +53,13 @@ public class WorldSimulator {
             day++;
 
             updateAnimals();
-
+            if(grassFlip.getState())
+            {
+                // random pos in range
+                int x = (int) (Math.random() * worldData.getXSize());
+                int y = (int) (Math.random() * worldData.getYSize());
+                worldData.addGrass(x,y);
+            }
             Thing.LogExtra("Simulation Update");
         }
     }
@@ -146,6 +160,19 @@ public class WorldSimulator {
 
     public void setSimSpeed(double simSpeed) {
         this.simSpeed = simSpeed;
+    }
+
+    public void loadFromFile(String fileName) {
+        worldData.loadFromFile(fileName);
+    }
+
+    public void saveToFile(String fileName) {
+        worldData.saveToFile(fileName);
+    }
+
+    public void adjustWindowSize(){
+        JSceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*getWorldData().getTileSize() + 64);
+        JSceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*getWorldData().getTileSize() + 64);
     }
 
     @Override

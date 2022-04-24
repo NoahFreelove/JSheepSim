@@ -11,8 +11,9 @@ import com.jsheepsim.Core.Entities.Grass;
 import java.io.File;
 
 public class Sheep extends Animal implements IAttackable, IBreedable {
-    public Sheep(Coord arrPos, WorldSimulator worldSimulator, String name) {
-        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"));
+
+    public Sheep(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
+        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"), 45, isChild);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class Sheep extends Animal implements IAttackable, IBreedable {
     @Override
     public Animal breed(Animal animal) {
         setHasEaten(false);
-        Sheep s = new Sheep(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child");
+        Sheep s = new Sheep(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
         worldSimulator.addAnimal(s);
         child = s;
         return s;

@@ -20,7 +20,7 @@ public class Animal extends Entity {
     protected Animal child = null;
     protected boolean isChild = false;
 
-    private final int maxDaysToLive = 30;
+    private final int maxDaysToLive;
     private int daysToLive;
 
     private float animProgress;
@@ -29,12 +29,19 @@ public class Animal extends Entity {
 
     private float posOffset = 0f;
 
-    public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
+    public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath, int maxDaysToLive, boolean isChild) {
         super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 5), jIdentity, arrPos,wmRef, imagePath);
         previousPosition = getTransform().getPosition();
         targetPosition = getTransform().getPosition();
+        this.isChild = isChild;
+        this.maxDaysToLive = maxDaysToLive;
         animProgress = 1;
         daysToLive = maxDaysToLive;
+        if(!isChild)
+        {
+            daysToLive-=10;
+        }
+        checkIfChild();
     }
 
     @Override
@@ -95,25 +102,27 @@ public class Animal extends Entity {
     private void checkLife() {
         if(daysToLive > 0) {
             daysToLive--;
-            if(daysToLive>maxDaysToLive-10)
-            {
-                // If is a child, make the sprite smaller
-                isChild = true;
-                getTransform().setScale(new Vector3(0.5f,0.5f,0.5f));
-                posOffset = 8;
-            }
-            else
-            {
-                isChild = false;
-                getTransform().setScale(new Vector3(1,1,1));
-                posOffset = 0;
-            }
+            checkIfChild();
             if (daysToLive == 0) {
                 die();
             }
         }
         else {
             die();
+        }
+    }
+    private void checkIfChild(){
+        if(daysToLive>maxDaysToLive-10)
+        {
+            getTransform().setScale(new Vector3(0.5f,0.5f,0.5f));
+            posOffset = 8;
+            isChild = true;
+        }
+        else
+        {
+            getTransform().setScale(new Vector3(1,1,1));
+            posOffset = 0;
+            isChild = false;
         }
     }
 

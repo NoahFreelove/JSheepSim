@@ -6,7 +6,9 @@ import com.jsheepsim.Core.Entities.Grass;
 import com.jsheepsim.Animals.Sheep;
 import com.jsheepsim.Animals.Wolf;
 
+import java.io.*;
 import java.util.Random;
+import java.util.Scanner;
 
 public class WorldData {
     private int xSize;
@@ -14,12 +16,14 @@ public class WorldData {
     private int tileSize;
     private Animal[][] animals;
     private Grass[][] grass;
+    private long seed;
     private final WorldSimulator worldSimulator;
 
-    public WorldData(int xSize, int ySize, int tileSize, WorldSimulator worldSimulator) {
+    public WorldData(int xSize, int ySize, int tileSize, long seed, WorldSimulator worldSimulator) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.tileSize = tileSize;
+        this.seed = seed;
         this.worldSimulator = worldSimulator;
         animals = new Animal[xSize][ySize];
         grass = new Grass[xSize][ySize];
@@ -169,20 +173,16 @@ public class WorldData {
                 int result = random.nextInt(100);
                 Animal a = null;
                 if(result < 10) {
-                    a = new Sheep(new Coord(i,j), worldSimulator, "sheep");
+                    a = new Sheep(new Coord(i,j), worldSimulator, "sheep", false);
                     addAnimal(a);
                 }
                 else if(result < 15) {
-                    a = new Wolf(new Coord(i,j), worldSimulator, "wolf");
+                    a = new Wolf(new Coord(i,j), worldSimulator, "wolf",false);
                     addAnimal(a);
                 }
                 else if(result < 20) {
                     a = new Fence(new Coord(i,j), worldSimulator, "fence");
                     addAnimal(a);
-                }
-                if(a!=null)
-                {
-                    a.setDaysToLive(a.getDaysToLive()-10);
                 }
             }
         }
@@ -237,7 +237,7 @@ public class WorldData {
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 if(isOccupied(i,j)) {
-                    if(animals[i][j] instanceof Sheep) {
+                    if(animals[i][j] instanceof Sheep && animals[i][j].isAlive() && animals[i][j]!=null) {
                         sheep[index] = (Sheep) animals[i][j];
                         index++;
                     }
@@ -258,7 +258,7 @@ public class WorldData {
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 if(isOccupied(i,j)) {
-                    if(animals[i][j] instanceof Wolf) {
+                    if(animals[i][j] instanceof Wolf && animals[i][j].isAlive() && animals[i][j]!=null) {
                         wolves[index] = (Wolf) animals[i][j];
                         index++;
                     }
@@ -273,6 +273,39 @@ public class WorldData {
         return wolvesNoNull;
     }
 
+    public void loadFromFile(String filename){
+        File file = new File("save/" +filename);
+        try {
+            Scanner scanner = new Scanner(file);
+            xSize = scanner.nextInt();
+            ySize = scanner.nextInt();
+            tileSize = scanner.nextInt();
+            seed = scanner.nextLong();
+            worldSimulator.getScene().purge();
+            worldSimulator.adjustWindowSize();
+            generateAnimals(seed);
+            generateGrass(seed);
+            System.out.println("World Data: Loaded from file");
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("World Data: Load File not found");
+        }
+    }
+
+    public void saveToFile(String filename){
+        File file = new File("save/" +filename);
+        try {
+            PrintWriter writer = new PrintWriter(file.getAbsolutePath(), "UTF-8");
+            writer.println(xSize);
+            writer.println(ySize);
+            writer.println(tileSize);
+            writer.println(seed);
+            writer.close();
+            System.out.println("World Data: Saved to file");
+        } catch (IOException e) {
+            System.out.println("World Data: IOException: " + e.getMessage());
+        }
+    }
 
 
 }
