@@ -1,12 +1,12 @@
-package com.jsheepsim;
+package com.jsheepsim.Animals;
 
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.jsheepsim.Core.Animal;
 import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.Entity;
+import com.jsheepsim.Core.Entities.Entity;
 import com.jsheepsim.Core.Interfaces.IAttackable;
 import com.jsheepsim.Core.Interfaces.IBreedable;
 import com.jsheepsim.Core.WorldSimulator;
+import com.jsheepsim.Core.Entities.Grass;
 
 import java.io.File;
 

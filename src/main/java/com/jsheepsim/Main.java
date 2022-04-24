@@ -2,34 +2,58 @@ package com.jsheepsim;
 
 import com.JEngine.Game.Visual.JCamera;
 import com.JEngine.Game.Visual.JWindow;
+import com.JEngine.Game.Visual.Scenes.JSceneManager;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.JEngine.Utility.About.JAppInfo;
+import com.JEngine.Utility.Misc.JUtility;
 import com.JEngine.Utility.Settings.EnginePrefs;
 import com.jsheepsim.Core.WorldSimulator;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import static javafx.scene.input.KeyEvent.*;
+
 public class Main extends Application {
+
+    public static WorldSimulator[] worlds = new WorldSimulator[3];
+    public static int selectedWorld = 0;
 
     @Override
     public void start(Stage stage) {
         setEnginePrefs();
-        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 20,20);
+        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 20,20,1);
+        WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 20,20,3);
+        WorldSimulator sim3 = new WorldSimulator("Sim 3", 5, 20,20,0.5);
+
+        worlds[0] = sim1;
+        worlds[1] = sim2;
+        worlds[2] = sim3;
+
         JWindow window = new JWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(60);
+
         new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
 
-        window.getStage().addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED, (e) -> {
+        window.getStage().addEventHandler(KEY_PRESSED, (e) -> {
             switch (e.getCode()) {
-                case ESCAPE -> System.exit(0);
-                case F1 -> sim1.startSimulation();
-                case F2 -> sim1.pauseSimulation();
+                case ESCAPE -> JUtility.exitApp();
+                case F1 -> Main.worlds[selectedWorld].startSimulation();
+                case F2 -> Main.worlds[selectedWorld].pauseSimulation();
+                case DIGIT1 -> switchWorld(0);
+                case DIGIT2 -> switchWorld(1);
+                case DIGIT3 -> switchWorld(2);
             }
         });
         window.setBackgroundColor(Color.web("#006400"));
         sim1.startSimulation();
+
+        Thread consoleThread = new Thread(() -> {
+            Console console = new Console();
+            console.console();
+        });
+        consoleThread.start();
     }
 
     public static void main(String[] args) {
@@ -41,8 +65,8 @@ public class Main extends Application {
         EnginePrefs.aggressiveGC = false;
         EnginePrefs.logDebug = false;
         EnginePrefs.logExtra = false;
-        EnginePrefs.logImportant = true;
-        EnginePrefs.logInfo = true;
+        EnginePrefs.logImportant = false;
+        EnginePrefs.logInfo = false;
 
         JAppInfo.appName = "SheepSim";
         JAppInfo.authors = new String[]{"Noah Freelove"};
@@ -53,4 +77,11 @@ public class Main extends Application {
 
         JAppInfo.logAppInfo(false);
     }
+
+    public static void switchWorld(int world)
+    {
+        selectedWorld = world;
+        JSceneManager.setActiveScene(worlds[selectedWorld].getScene());
+    }
+
 }

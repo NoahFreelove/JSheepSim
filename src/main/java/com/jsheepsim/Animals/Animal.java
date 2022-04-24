@@ -1,12 +1,14 @@
-package com.jsheepsim.Core;
+package com.jsheepsim.Animals;
 
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.JEngine.Utility.JMath;
+import com.jsheepsim.Core.Coord;
+import com.jsheepsim.Core.Entities.Entity;
 import com.jsheepsim.Core.Interfaces.IBreedable;
 import com.jsheepsim.Core.Interfaces.IHunter;
-import com.jsheepsim.Sheep;
+import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;
 
@@ -14,13 +16,18 @@ public class Animal extends Entity {
 
     protected boolean isAlive = true;
     private boolean hasEaten = false;
-    protected Animal child = null;
 
-    public int maxDaysToLive = 30;
-    public int daysToLive;
+    protected Animal child = null;
+    protected boolean isChild = false;
+
+    private final int maxDaysToLive = 30;
+    private int daysToLive;
+
     private float animProgress;
     private Vector3 previousPosition;
     private Vector3 targetPosition;
+
+    private float posOffset = 0f;
 
     public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
         super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 5), jIdentity, arrPos,wmRef, imagePath);
@@ -34,8 +41,11 @@ public class Animal extends Entity {
     public void Update(){
         if(animProgress<1)
         {
-            animProgress+= 0.04f;
-            getTransform().setPosition(JMath.interpolate(previousPosition, targetPosition, animProgress));
+            animProgress+= 0.04f*worldSimulator.getSimSpeed();
+            Vector3 interpolatedPosition = JMath.interpolate(previousPosition, targetPosition, animProgress);
+            interpolatedPosition.x += posOffset;
+            interpolatedPosition.y += posOffset;
+            getTransform().setPosition(interpolatedPosition);
         }
         super.Update();
     }
@@ -44,21 +54,13 @@ public class Animal extends Entity {
     public void simUpdate(){
         animProgress = 0;
         previousPosition = new Vector3(getX()*worldSimulator.getWorldData().getTileSize(), getY()*worldSimulator.getWorldData().getTileSize(), getTransform().position.z);
-        if(daysToLive > 0) {
-            daysToLive--;
-            if(daysToLive>maxDaysToLive-10)
-            {
-                getTransform().setScale(new Vector3(0.5f,0.5f,0.5f));
-            }
-            else
-            {
-                getTransform().setScale(new Vector3(1,1,1));
-            }
-            if (daysToLive == 0) {
-                die();
-            }
-        }
 
+        checkLife();
+
+        doUpdateAction();
+    }
+
+    private void doUpdateAction() {
         // If they have eaten they have the possibility to breed, if not just move
         if(hasEaten())
         {
@@ -89,6 +91,32 @@ public class Animal extends Entity {
             randomMove();
         }
     }
+
+    private void checkLife() {
+        if(daysToLive > 0) {
+            daysToLive--;
+            if(daysToLive>maxDaysToLive-10)
+            {
+                // If is a child, make the sprite smaller
+                isChild = true;
+                getTransform().setScale(new Vector3(0.5f,0.5f,0.5f));
+                posOffset = 8;
+            }
+            else
+            {
+                isChild = false;
+                getTransform().setScale(new Vector3(1,1,1));
+                posOffset = 0;
+            }
+            if (daysToLive == 0) {
+                die();
+            }
+        }
+        else {
+            die();
+        }
+    }
+
     private void updateTargetPosition()
     {
         targetPosition =  new Vector3(getX()*worldSimulator.getWorldData().getTileSize(), getY()*worldSimulator.getWorldData().getTileSize(), getTransform().position.z);
@@ -135,7 +163,7 @@ public class Animal extends Entity {
                 if(a.hasEaten())
                 {
                     // Parents cannot breed with their children
-                    if((a.child != this && child != a) || child == null)
+                    if((a.child != this && child != a && !a.isChild) || child == null)
                     {
                         if(a != this)
                         {
@@ -160,6 +188,23 @@ public class Animal extends Entity {
 
     public void setHasEaten(boolean hasEaten) {
         this.hasEaten = hasEaten;
+    }
+
+    public boolean isAlive(){
+        return isAlive;
+    }
+
+    public int getDaysToLive() {
+        return daysToLive;
+    }
+
+    public void setDaysToLive(int daysToLive) {
+        this.daysToLive = daysToLive;
+    }
+
+    @Override
+    public String toString(){
+        return String.format("%s '%s' - IsChild:%b - HasEaten:%b - DaysToLive:%d", getClass().getSimpleName(), getJIdentity().getName(), isChild, hasEaten, daysToLive);
     }
 }
 

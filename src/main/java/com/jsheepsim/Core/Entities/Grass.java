@@ -1,11 +1,8 @@
-package com.jsheepsim;
+package com.jsheepsim.Core.Entities;
 
-import com.JEngine.PrimitiveTypes.JImage;
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.Entity;
-import com.jsheepsim.Core.Interfaces.IAttackable;
 import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;

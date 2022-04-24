@@ -1,7 +1,6 @@
-package com.jsheepsim;
+package com.jsheepsim.Animals;
 
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.jsheepsim.Core.Animal;
 import com.jsheepsim.Core.Coord;
 import com.jsheepsim.Core.Interfaces.IAttackable;
 import com.jsheepsim.Core.Interfaces.IBreedable;
@@ -32,7 +31,6 @@ public class Wolf extends Animal implements IBreedable, IHunter {
                     attackable.attacked(this);
                     setHasEaten(true);
                     moveAbsolute(a.getX(),a.getY());
-                    System.out.println("Killed sheep");
                     return true;
                 }
             }

@@ -1,10 +1,10 @@
 package com.jsheepsim.Core;
 
-import com.JEngine.Game.Visual.Scenes.JSceneManager;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.jsheepsim.Grass;
-import com.jsheepsim.Sheep;
-import com.jsheepsim.Wolf;
+import com.jsheepsim.Animals.Animal;
+import com.jsheepsim.Core.Entities.Fence;
+import com.jsheepsim.Core.Entities.Grass;
+import com.jsheepsim.Animals.Sheep;
+import com.jsheepsim.Animals.Wolf;
 
 import java.util.Random;
 
@@ -182,7 +182,7 @@ public class WorldData {
                 }
                 if(a!=null)
                 {
-                    a.daysToLive-=10;
+                    a.setDaysToLive(a.getDaysToLive()-10);
                 }
             }
         }
@@ -190,7 +190,7 @@ public class WorldData {
 
     public void generateGrass(long seed)
     {
-        Random random = new Random(seed);
+        Random random = new Random((long)(seed*0.5));
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 int result = random.nextInt(100);
@@ -209,5 +209,70 @@ public class WorldData {
         }
         return false;
     }
+
+    public Animal[] getAliveAnimals(){
+        Animal[] aliveAnimals = new Animal[xSize*ySize];
+        int index = 0;
+        for(int i = 0; i < xSize; i++) {
+            for(int j = 0; j < ySize; j++) {
+                if(isOccupied(i,j)) {
+                    if(animals[i][j].isAlive() && !(animals[i][j] instanceof Fence)) {
+                        aliveAnimals[index] = animals[i][j];
+                        index++;
+                    }
+                }
+            }
+        }
+        // remove nulls
+        Animal[] aliveAnimalsNoNulls = new Animal[index];
+        for(int i = 0; i < index; i++) {
+            aliveAnimalsNoNulls[i] = aliveAnimals[i];
+        }
+        return aliveAnimalsNoNulls;
+    }
+
+    public Sheep[] getSheep(){
+        Sheep[] sheep = new Sheep[xSize*ySize];
+        int index = 0;
+        for(int i = 0; i < xSize; i++) {
+            for(int j = 0; j < ySize; j++) {
+                if(isOccupied(i,j)) {
+                    if(animals[i][j] instanceof Sheep) {
+                        sheep[index] = (Sheep) animals[i][j];
+                        index++;
+                    }
+                }
+            }
+        }
+        // remove nulls
+        Sheep[] sheepNoNulls = new Sheep[index];
+        for(int i = 0; i < index; i++) {
+            sheepNoNulls[i] = sheep[i];
+        }
+        return sheepNoNulls;
+    }
+
+    public Wolf[] getWolves(){
+        Wolf[] wolves = new Wolf[xSize*ySize];
+        int index = 0;
+        for(int i = 0; i < xSize; i++) {
+            for(int j = 0; j < ySize; j++) {
+                if(isOccupied(i,j)) {
+                    if(animals[i][j] instanceof Wolf) {
+                        wolves[index] = (Wolf) animals[i][j];
+                        index++;
+                    }
+                }
+            }
+        }
+        // remove nulls
+        Wolf[] wolvesNoNull = new Wolf[index];
+        for(int i = 0; i < index; i++) {
+            wolvesNoNull[i] = wolves[i];
+        }
+        return wolvesNoNull;
+    }
+
+
 
 }

@@ -1,10 +1,12 @@
-package com.jsheepsim.Core;
+package com.jsheepsim.Core.Entities;
 
 import com.JEngine.Game.PlayersAndPawns.JPawn;
 import com.JEngine.PrimitiveTypes.JImage;
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
+import com.jsheepsim.Core.Coord;
+import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;
 
@@ -12,7 +14,7 @@ public class Entity extends JPawn {
     private String name;
     private Coord pos;
     protected File image;
-    protected boolean hasUpdated;
+    private boolean hasUpdated;
     protected final WorldSimulator worldSimulator;
 
     public Entity(Transform transform, JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
@@ -62,6 +64,14 @@ public class Entity extends JPawn {
 
     public void setImage(File image) {
         this.image = image;
+    }
+
+    public boolean hasUpdated() {
+        return hasUpdated;
+    }
+
+    public void setHasUpdated(boolean hasUpdated) {
+        this.hasUpdated = hasUpdated;
     }
 
     public WorldSimulator getWorldSimulator() {
