@@ -2,7 +2,7 @@ package com.jsheepsim.Core;
 
 import com.jsheepsim.Animals.Animal;
 import com.jsheepsim.Core.Entities.Fence;
-import com.jsheepsim.Core.Entities.Grass;
+import com.jsheepsim.Core.Entities.Plant;
 import com.jsheepsim.Animals.Sheep;
 import com.jsheepsim.Animals.Wolf;
 
@@ -15,7 +15,7 @@ public class WorldData {
     private int ySize;
     private int tileSize;
     private Animal[][] animals;
-    private Grass[][] grass;
+    private Plant[][] plants;
     private long seed;
     private final WorldSimulator worldSimulator;
 
@@ -26,7 +26,7 @@ public class WorldData {
         this.seed = seed;
         this.worldSimulator = worldSimulator;
         animals = new Animal[xSize][ySize];
-        grass = new Grass[xSize][ySize];
+        plants = new Plant[xSize][ySize];
     }
 
     public int getXSize() {
@@ -64,8 +64,8 @@ public class WorldData {
 
     public boolean addGrass(int x, int y) {
         if (x < xSize && y < ySize) {
-            grass[x][y] = new Grass(new Coord(x,y), worldSimulator);
-            worldSimulator.getScene().add(grass[x][y]);
+            plants[x][y] = new Plant(new Coord(x,y), worldSimulator);
+            worldSimulator.getScene().add(plants[x][y]);
             return true;
         }
         return false;
@@ -117,12 +117,12 @@ public class WorldData {
         this.animals = animals;
     }
 
-    public Grass[][] getGrass() {
-        return grass;
+    public Plant[][] getGrass() {
+        return plants;
     }
 
-    public void setGrass(Grass[][] grass) {
-        this.grass = grass;
+    public void setGrass(Plant[][] plants) {
+        this.plants = plants;
     }
 
     public Coord getAvailableSpotInRange(int x, int y, int range) {
@@ -189,20 +189,20 @@ public class WorldData {
         return animalsInRange2;
     }
 
-    public Grass[] getGrassInRange(int x, int y, int range) {
-        Grass[] grassInRange = new Grass[xSize*ySize];
+    public Plant[] getGrassInRange(int x, int y, int range) {
+        Plant[] plantInRange = new Plant[xSize*ySize];
         int index = 0;
         for(int i = x - range; i <= x + range; i++) {
             for(int j = y - range; j <= y + range; j++) {
                 if(i >= 0 && j >= 0 && i < xSize && j < ySize) {
                     if(isOccupied(i,j)) {
-                        grassInRange[index] = grass[i][j];
+                        plantInRange[index] = plants[i][j];
                         index++;
                     }
                 }
             }
         }
-        return grassInRange;
+        return plantInRange;
     }
 
     public void generateAnimals(long seed)
@@ -244,7 +244,7 @@ public class WorldData {
 
     public boolean removeGrass(int x, int y) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0) {
-            grass[x][y] = null;
+            plants[x][y] = null;
             return true;
         }
         return false;

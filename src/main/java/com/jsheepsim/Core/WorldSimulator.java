@@ -5,7 +5,7 @@ import com.JEngine.Game.Visual.Scenes.JSceneManager;
 import com.JEngine.PrimitiveTypes.FlipFlop;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
 import com.jsheepsim.Animals.Animal;
-import com.jsheepsim.Core.Entities.Grass;
+import com.jsheepsim.Core.Entities.Plant;
 
 public class WorldSimulator {
     private JScene scene; // Holds the Images and objects of the world
@@ -140,7 +140,7 @@ public class WorldSimulator {
     public Animal[] getAnimalsInRangeExclusive(int x, int y, int range, Animal animal) {
         return worldData.getAnimalsInRangeExclusive(x, y, range, animal);
     }
-    public Grass[] getGrassInRange(int x, int y, int range) {
+    public Plant[] getPlantInRange(int x, int y, int range) {
         return worldData.getGrassInRange(x, y, range);
     }
 

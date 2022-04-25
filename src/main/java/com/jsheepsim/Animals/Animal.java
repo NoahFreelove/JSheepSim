@@ -6,33 +6,36 @@ import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.JEngine.Utility.JMath;
 import com.jsheepsim.Core.Coord;
 import com.jsheepsim.Core.Entities.Entity;
-import com.jsheepsim.Core.Interfaces.IBreedable;
-import com.jsheepsim.Core.Interfaces.IHunter;
 import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;
 
 public class Animal extends Entity {
 
+    // Basic info
     protected boolean isAlive = true;
     private boolean hasEaten = false;
+    protected final int foodChainLevel;
 
+    // Children stuff
     protected Animal child = null;
     protected boolean isChild = false;
 
+    // Age stuff
     private final int maxDaysToLive;
     private int daysToLive;
 
+    // Animation stuff
     private float animProgress;
     private Vector3 previousPosition;
     private Vector3 targetPosition;
-
     private float posOffset = 0f;
 
-    public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath, int maxDaysToLive, boolean isChild) {
+    public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath, int maxDaysToLive, boolean isChild, int foodChainLevel) {
         super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 5), jIdentity, arrPos,wmRef, imagePath);
         previousPosition = getTransform().getPosition();
         targetPosition = getTransform().getPosition();
+        this.foodChainLevel = foodChainLevel;
         this.isChild = isChild;
         this.maxDaysToLive = maxDaysToLive;
         animProgress = 1;
@@ -79,9 +82,9 @@ public class Animal extends Entity {
         else
         {
             // If the animal can hunt, look for prey
-            if(this instanceof IHunter hunter)
+            if(this instanceof Carnivore carnivore)
             {
-                if(!hunter.hunt())
+                if(!carnivore.hunt())
                 {
                     // If they can't hunt, move randomly
                     randomMove();
@@ -90,9 +93,9 @@ public class Animal extends Entity {
                 // If they could hunt, don't move this day
                 return;
             }
-            if(this instanceof Sheep sheep)
+            else if(this instanceof Herbivore herbivore)
             {
-                if(sheep.lookForGrass())
+                if(herbivore.lookForPlants())
                 {
                     return;
                 }
@@ -172,14 +175,14 @@ public class Animal extends Entity {
             if(a == null)
                 continue;
 
-            if(a.getClass() == getClass() && a instanceof IBreedable b)
+            if(a.getClass() == getClass())
             {
                 if(a.hasEaten())
                 {
                     // Parents cannot breed with their children
                     if(a.child != this && child != a && !a.isChild && !isChild)
                     {
-                        child = b.breed(this);
+                        child = a.breed(this);
                         setHasEaten(false);
                     }
                 }
@@ -187,6 +190,8 @@ public class Animal extends Entity {
         }
         return false;
     }
+
+
 
     protected boolean lookForFood()
     {
@@ -213,9 +218,25 @@ public class Animal extends Entity {
         this.daysToLive = daysToLive;
     }
 
+    public int getFoodChainLevel() {
+        return foodChainLevel;
+    }
+
     @Override
     public String toString(){
         return String.format("%s '%s' - IsChild:%b - HasEaten:%b - DaysToLive:%d", getClass().getSimpleName(), getJIdentity().getName(), isChild, hasEaten, daysToLive);
     }
+
+    public void attacked(Animal animal) {
+        if(animal.getFoodChainLevel() > getFoodChainLevel())
+        {
+            die();
+        }
+    }
+
+    protected Animal breed(Animal animal) {
+        return null;
+    }
+
 }
 

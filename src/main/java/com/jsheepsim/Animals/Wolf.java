@@ -2,20 +2,17 @@ package com.jsheepsim.Animals;
 
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.Interfaces.IAttackable;
-import com.jsheepsim.Core.Interfaces.IBreedable;
-import com.jsheepsim.Core.Interfaces.IHunter;
 import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;
 
-public class Wolf extends Animal implements IBreedable, IHunter {
+public class Wolf extends Carnivore {
     public Wolf(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
-        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"), 30, isChild);
+        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"), 30, isChild, 2);
     }
 
     @Override
-    public Animal breed(Animal animal) {
+    protected Animal breed(Animal animal) {
         setHasEaten(false);
         Wolf w = new Wolf(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
         child = w;
@@ -23,18 +20,5 @@ public class Wolf extends Animal implements IBreedable, IHunter {
         return w;
     }
 
-    @Override
-    public boolean hunt() {
-        for (Animal a:worldSimulator.getAnimalsInRange(getX(), getY(), 1)) {
-            if(a!=null && a!= this){
-                if(a instanceof IAttackable attackable){
-                    attackable.attacked(this);
-                    setHasEaten(true);
-                    moveAbsolute(a.getX(),a.getY());
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+
 }
