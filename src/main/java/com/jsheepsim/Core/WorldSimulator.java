@@ -9,8 +9,8 @@ import com.jsheepsim.Core.Entities.Grass;
 
 public class WorldSimulator {
     private JScene scene; // Holds the Images and objects of the world
-    private WorldData worldData; // Handles the data of the world including movement
-    private FlipFlop grassFlip;
+    private final WorldData worldData; // Handles the data of the world including movement
+    private final FlipFlop grassFlip;
     private final Thread simulationThread; // Thread that runs the simulation
     private boolean isRunning = false; // Whether the simulation is running or not
 

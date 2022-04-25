@@ -9,6 +9,8 @@ import com.jsheepsim.Core.WorldSimulator;
 import java.util.Scanner;
 
 public class Console {
+    public boolean isRunning;
+
     String commandList =
                 """
                 help: show this help
@@ -20,10 +22,12 @@ public class Console {
                 worldstatus: print the status of a world
                 status: print the status of the current world
                 load: load a world from a file
+                gc: run the garbage collector
                 """;
     public void console(){
         System.out.println("Enter a command:");
-        while (true){
+        isRunning = true;
+        while (isRunning){
             Scanner s = new Scanner(System.in);
             System.out.print("> ");
             String input = s.nextLine();
@@ -45,6 +49,7 @@ public class Console {
             case "status" -> worldStatus(Main.selectedWorld);
             case "load" -> loadWorld();
             case "save" -> saveWorld();
+            case "gc" -> System.gc();
         }
 
     }
@@ -113,5 +118,9 @@ public class Console {
         System.out.print("Enter a file name: ");
         return new Scanner(System.in).next();
 
+    }
+
+    public void stop(){
+        isRunning = false;
     }
 }
