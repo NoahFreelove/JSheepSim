@@ -1,10 +1,12 @@
 package com.jsheepsim;
 
 import com.JEngine.Utility.Misc.JUtility;
-import com.jsheepsim.Animals.Animal;
-import com.jsheepsim.Animals.Sheep;
-import com.jsheepsim.Animals.Wolf;
-import com.jsheepsim.Core.WorldSimulator;
+import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
+import com.jsheepsim.Entities.Animals.Bear;
+import com.jsheepsim.Entities.Animals.Bunny;
+import com.jsheepsim.Entities.Animals.Sheep;
+import com.jsheepsim.Entities.Animals.Wolf;
+import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.util.Scanner;
 
@@ -81,14 +83,18 @@ public class Console {
         {
             WorldSimulator ws = Main.worlds[worldNum];
             Animal[] animalsAlive = ws.getWorldData().getAliveAnimals();
-            Sheep[] sheepAlive = ws.getWorldData().getSheep();
-            Wolf[] wolvesAlive = ws.getWorldData().getWolves();
+            Animal[] sheepAlive = ws.getWorldData().getAllAnimalsOfClass(Sheep.class);
+            Animal[] wolvesAlive = ws.getWorldData().getAllAnimalsOfClass(Wolf.class);
+            Animal[] bunniesAlive = ws.getWorldData().getAllAnimalsOfClass(Bunny.class);
+            Animal[] bearsAlive = ws.getWorldData().getAllAnimalsOfClass(Bear.class);
 
             System.out.printf("World '%s' Status:%n", ws.getScene().getSceneName());
             System.out.printf("Day:%d%n", ws.getDay());
             System.out.printf("%d animals alive%n", animalsAlive.length);
             System.out.printf("%d sheep alive%n", sheepAlive.length);
+            System.out.printf("%d bunnies alive%n", bunniesAlive.length);
             System.out.printf("%d wolves alive%n%n", wolvesAlive.length);
+            System.out.printf("%d bears alive%n", bearsAlive.length);
         }
     }
 

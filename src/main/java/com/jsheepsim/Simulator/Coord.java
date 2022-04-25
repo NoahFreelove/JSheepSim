@@ -1,4 +1,4 @@
-package com.jsheepsim.Core;
+package com.jsheepsim.Simulator;
 
     public class Coord {
         public int x;

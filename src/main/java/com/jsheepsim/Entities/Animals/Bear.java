@@ -1,12 +1,14 @@
-package com.jsheepsim.Animals;
+package com.jsheepsim.Entities.Animals;
 
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.WorldSimulator;
+import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
+import com.jsheepsim.Entities.Animals.BaseClasses.Carnivore;
+import com.jsheepsim.Simulator.Coord;
+import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.io.File;
 
-public class Bear extends Carnivore{
+public class Bear extends Carnivore {
     public Bear(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
         super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/bear.png"), 30, isChild, 3);
     }

@@ -1,12 +1,12 @@
-package com.jsheepsim.Animals;
+package com.jsheepsim.Entities.Animals.BaseClasses;
 
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
 import com.JEngine.Utility.JMath;
-import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.Entities.Entity;
-import com.jsheepsim.Core.WorldSimulator;
+import com.jsheepsim.Simulator.Coord;
+import com.jsheepsim.Entities.Entity;
+import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.io.File;
 
@@ -172,7 +172,7 @@ public abstract class Animal extends Entity {
             return false;
 
         for (Animal a: worldSimulator.getAnimalsInRangeExclusive(getPos().x, getPos().y, 1, this)){
-            if(a == null)
+            if(a == null || a == this)
                 continue;
 
             if(a.getClass() == getClass())
@@ -228,10 +228,7 @@ public abstract class Animal extends Entity {
     }
 
     public void attacked(Animal animal) {
-        if(animal.getFoodChainLevel() > getFoodChainLevel())
-        {
-            die();
-        }
+        die();
     }
 
     protected abstract Animal breed(Animal animal);

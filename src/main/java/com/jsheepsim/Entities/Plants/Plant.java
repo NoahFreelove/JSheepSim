@@ -1,9 +1,10 @@
-package com.jsheepsim.Core.Entities;
+package com.jsheepsim.Entities.Plants;
 
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.WorldSimulator;
+import com.jsheepsim.Simulator.Coord;
+import com.jsheepsim.Entities.Entity;
+import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.io.File;
 

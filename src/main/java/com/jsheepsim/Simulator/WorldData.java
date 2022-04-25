@@ -1,11 +1,9 @@
-package com.jsheepsim.Core;
+package com.jsheepsim.Simulator;
 
-import com.jsheepsim.Animals.Animal;
-import com.jsheepsim.Animals.Bear;
-import com.jsheepsim.Core.Entities.Fence;
-import com.jsheepsim.Core.Entities.Plant;
-import com.jsheepsim.Animals.Sheep;
-import com.jsheepsim.Animals.Wolf;
+import com.jsheepsim.Entities.Animals.*;
+import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
+import com.jsheepsim.Entities.Fence;
+import com.jsheepsim.Entities.Plants.Plant;
 
 import java.io.*;
 import java.util.Random;
@@ -212,21 +210,25 @@ public class WorldData {
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 int result = random.nextInt(100);
-                Animal a = null;
-                if(result < 10) {
-                    a = new Sheep(new Coord(i,j), worldSimulator, "sheep", false);
+                Animal newAnimal = null;
+                if(result < 6) {
+                    newAnimal = new Sheep(new Coord(i,j), worldSimulator, "sheep", false);
+                }
+                else if(result < 10) {
+                    newAnimal = new Bunny(new Coord(i,j), worldSimulator, "bunny",false);
                 }
                 else if(result < 13) {
-                    a = new Wolf(new Coord(i,j), worldSimulator, "wolf",false);
+                    newAnimal = new Wolf(new Coord(i,j), worldSimulator, "wolf",false);
                 }
                 else if(result < 15) {
-                    a = new Bear(new Coord(i,j), worldSimulator, "bear",false);
+                    newAnimal = new Bear(new Coord(i,j), worldSimulator, "bear",false);
                 }
+
                 else if(result < 20) {
-                    a = new Fence(new Coord(i,j), worldSimulator, "fence");
+                    newAnimal = new Fence(new Coord(i,j), worldSimulator, "fence");
                 }
-                if(a != null) {
-                    addAnimal(a);
+                if(newAnimal != null) {
+                    addAnimal(newAnimal);
                 }
             }
         }
@@ -234,12 +236,12 @@ public class WorldData {
 
     public void generateGrass(long seed)
     {
-        Random random = new Random((long)(seed*0.5));
+        Random random = new Random((long)(seed*0.5* new Random().nextFloat()));
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 int result = random.nextInt(100);
 
-                if(result < 20) {
+                if(result < 35) {
                     addGrass(i,j);
                 }
             }
@@ -275,46 +277,36 @@ public class WorldData {
         return aliveAnimalsNoNulls;
     }
 
-    public Sheep[] getSheep(){
-        Sheep[] sheep = new Sheep[xSize*ySize];
+    public Animal[] getAllAnimalsOfClass(Class<? extends Animal> animalClass){
+        Animal[] animalArr = new Animal[xSize*ySize];
         int index = 0;
         for(int i = 0; i < xSize; i++) {
             for(int j = 0; j < ySize; j++) {
                 if(isOccupied(i,j)) {
-                    if(animals[i][j] instanceof Sheep && animals[i][j].isAlive() && animals[i][j]!=null) {
-                        sheep[index] = (Sheep) animals[i][j];
+                    if(animals[i][j].getClass().equals(animalClass) && animals[i][j].isAlive() && animals[i][j]!=null) {
+                        animalArr[index] = animals[i][j];
                         index++;
                     }
                 }
             }
         }
         // remove nulls
-        Sheep[] sheepNoNulls = new Sheep[index];
+        Animal[] animalsNoNulls = new Animal[index];
         for(int i = 0; i < index; i++) {
-            sheepNoNulls[i] = sheep[i];
+            animalsNoNulls[i] = animalArr[i];
         }
-        return sheepNoNulls;
+        return animalsNoNulls;
     }
 
-    public Wolf[] getWolves(){
-        Wolf[] wolves = new Wolf[xSize*ySize];
-        int index = 0;
-        for(int i = 0; i < xSize; i++) {
-            for(int j = 0; j < ySize; j++) {
-                if(isOccupied(i,j)) {
-                    if(animals[i][j] instanceof Wolf && animals[i][j].isAlive() && animals[i][j]!=null) {
-                        wolves[index] = (Wolf) animals[i][j];
-                        index++;
-                    }
+    public Coord getAvailableSpotAnywhere(){
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
+                if(!isOccupied(i,j)) {
+                    return new Coord(i,j);
                 }
             }
         }
-        // remove nulls
-        Wolf[] wolvesNoNull = new Wolf[index];
-        for(int i = 0; i < index; i++) {
-            wolvesNoNull[i] = wolves[i];
-        }
-        return wolvesNoNull;
+        return new Coord(-1,-1);
     }
 
     public void loadFromFile(String filename){

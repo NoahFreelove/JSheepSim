@@ -1,9 +1,9 @@
-package com.jsheepsim.Core.Entities;
+package com.jsheepsim.Entities;
 
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.jsheepsim.Animals.Animal;
-import com.jsheepsim.Core.Coord;
-import com.jsheepsim.Core.WorldSimulator;
+import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
+import com.jsheepsim.Simulator.Coord;
+import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.io.File;
 

@@ -1,11 +1,11 @@
-package com.jsheepsim.Core;
+package com.jsheepsim.Simulator;
 
 import com.JEngine.Game.Visual.Scenes.JScene;
 import com.JEngine.Game.Visual.Scenes.JSceneManager;
 import com.JEngine.PrimitiveTypes.FlipFlop;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
-import com.jsheepsim.Animals.Animal;
-import com.jsheepsim.Core.Entities.Plant;
+import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
+import com.jsheepsim.Entities.Plants.Plant;
 
 public class WorldSimulator {
     private JScene scene; // Holds the Images and objects of the world
@@ -51,6 +51,7 @@ public class WorldSimulator {
             if(!isRunning)
                 continue;
             simUpdate();
+            EventHandler.startEvent(this);
             Thing.LogExtra("Simulation Update");
         }
     }
@@ -144,6 +145,10 @@ public class WorldSimulator {
         return worldData.getGrassInRange(x, y, range);
     }
 
+    public Coord getAvailableSpotAnywhere(){
+        return worldData.getAvailableSpotAnywhere();
+    }
+
     public WorldData getWorldData() {
         return worldData;
     }
@@ -182,8 +187,9 @@ public class WorldSimulator {
     }
 
     public void adjustWindowSize(){
-        JSceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*getWorldData().getTileSize() + 64);
-        JSceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*getWorldData().getTileSize() + 64);
+        int tileSize = getWorldData().getTileSize();
+        JSceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*tileSize + tileSize);
+        JSceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*tileSize + 80);
     }
 
     @Override
