@@ -1,6 +1,7 @@
 package com.jsheepsim.Core;
 
 import com.jsheepsim.Animals.Animal;
+import com.jsheepsim.Animals.Bear;
 import com.jsheepsim.Core.Entities.Fence;
 import com.jsheepsim.Core.Entities.Plant;
 import com.jsheepsim.Animals.Sheep;
@@ -214,14 +215,17 @@ public class WorldData {
                 Animal a = null;
                 if(result < 10) {
                     a = new Sheep(new Coord(i,j), worldSimulator, "sheep", false);
-                    addAnimal(a);
+                }
+                else if(result < 13) {
+                    a = new Wolf(new Coord(i,j), worldSimulator, "wolf",false);
                 }
                 else if(result < 15) {
-                    a = new Wolf(new Coord(i,j), worldSimulator, "wolf",false);
-                    addAnimal(a);
+                    a = new Bear(new Coord(i,j), worldSimulator, "bear",false);
                 }
                 else if(result < 20) {
                     a = new Fence(new Coord(i,j), worldSimulator, "fence");
+                }
+                if(a != null) {
                     addAnimal(a);
                 }
             }

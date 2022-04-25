@@ -14,11 +14,9 @@ public class Wolf extends Carnivore {
     @Override
     protected Animal breed(Animal animal) {
         setHasEaten(false);
-        Wolf w = new Wolf(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
-        child = w;
-        worldSimulator.addAnimal(w);
-        return w;
+        Wolf newWolf = new Wolf(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
+        child = newWolf;
+        worldSimulator.addAnimal(newWolf);
+        return newWolf;
     }
-
-
 }

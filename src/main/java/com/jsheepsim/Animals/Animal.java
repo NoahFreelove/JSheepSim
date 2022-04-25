@@ -10,7 +10,7 @@ import com.jsheepsim.Core.WorldSimulator;
 
 import java.io.File;
 
-public class Animal extends Entity {
+public abstract class Animal extends Entity {
 
     // Basic info
     protected boolean isAlive = true;
@@ -234,9 +234,7 @@ public class Animal extends Entity {
         }
     }
 
-    protected Animal breed(Animal animal) {
-        return null;
-    }
+    protected abstract Animal breed(Animal animal);
 
 }
 

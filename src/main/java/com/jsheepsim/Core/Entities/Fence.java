@@ -17,6 +17,11 @@ public class Fence extends Animal {
     public void simUpdate(){}
 
     @Override
+    protected Animal breed(Animal animal) {
+        return null;
+    }
+
+    @Override
     public void Update(){}
 
 }

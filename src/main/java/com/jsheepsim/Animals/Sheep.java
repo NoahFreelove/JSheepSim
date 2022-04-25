@@ -15,10 +15,9 @@ public class Sheep extends Herbivore {
     @Override
     public Animal breed(Animal animal) {
         setHasEaten(false);
-        Sheep s = new Sheep(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
-        worldSimulator.addAnimal(s);
-        child = s;
-        return s;
+        Sheep newSheep = new Sheep(worldSimulator.getAvailableSpotInRange(getX(),getY(),1), worldSimulator, getName() + " child", true);
+        worldSimulator.addAnimal(newSheep);
+        child = newSheep;
+        return newSheep;
     }
-
 }
