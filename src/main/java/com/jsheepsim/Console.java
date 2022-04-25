@@ -18,10 +18,13 @@ public class Console {
                 clear: print some newlines to clear the console
                 start: start world (F1)
                 stop: pause world (F2)
+                reload: reload world (F3)
+                step: simulate one day (F4)
                 setworld: start watching a world (num keys)
                 worldstatus: print the status of a world
                 status: print the status of the current world
                 load: load a world from a file
+                save: save a world to a file
                 gc: run the garbage collector
                 """;
     public void console(){
@@ -44,6 +47,8 @@ public class Console {
             case "clear" -> System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
             case "start" -> Main.worlds[Main.selectedWorld].startSimulation();
             case "stop" -> Main.worlds[Main.selectedWorld].pauseSimulation();
+            case "reload" -> Main.worlds[Main.selectedWorld].reloadWorld();
+            case "step" -> Main.worlds[Main.selectedWorld].step();
             case "setworld" -> changeWorldNum();
             case "worldstatus" -> worldStatus(-1);
             case "status" -> worldStatus(Main.selectedWorld);
@@ -51,7 +56,6 @@ public class Console {
             case "save" -> saveWorld();
             case "gc" -> System.gc();
         }
-
     }
 
     void changeWorldNum()

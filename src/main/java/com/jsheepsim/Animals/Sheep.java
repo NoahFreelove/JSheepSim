@@ -32,7 +32,7 @@ public class Sheep extends Animal implements IAttackable, IBreedable {
         return s;
     }
 
-    public void lookForGrass(){
+    public boolean lookForGrass(){
         if(!hasEaten()){
             for (Grass g: worldSimulator.getGrassInRange(getX(), getY(), 1)){
                 if(g!=null){
@@ -41,10 +41,12 @@ public class Sheep extends Animal implements IAttackable, IBreedable {
                     if(!worldSimulator.isOccupied(g.getX(), g.getY())){
                         moveAbsolute(g.getX(),g.getY());
                         System.out.println("Sheep ate grass");
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
 }

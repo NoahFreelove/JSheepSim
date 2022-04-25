@@ -29,7 +29,7 @@ public class WorldSimulator {
         this.simSpeed = simSpeed;
         this.grassFlip = new FlipFlop();
         worldData = new WorldData(xSize, ySize, tileSize, worldSeed, this);
-        simulationThread = new Thread(this::simulationUpdate);
+        simulationThread = new Thread(this::simTick);
         generateAnimals(worldSeed);
         generateGrass(worldSeed);
         startThread();
@@ -43,28 +43,20 @@ public class WorldSimulator {
         this.scene = scene;
     }
 
-    private void simulationUpdate(){
+    private void simTick(){
         while(true){
             try {
                 Thread.sleep((long) (1000/simSpeed));
             } catch (InterruptedException ignore) {}
             if(!isRunning)
                 continue;
-            day++;
-
-            updateAnimals();
-            if(grassFlip.getState())
-            {
-                // random pos in range
-                int x = (int) (Math.random() * worldData.getXSize());
-                int y = (int) (Math.random() * worldData.getYSize());
-                worldData.addGrass(x,y);
-            }
+            simUpdate();
             Thing.LogExtra("Simulation Update");
         }
     }
 
-    private void updateAnimals() {
+    private void simUpdate() {
+        day++;
         for ( Animal[] animalArr : worldData.getAnimals() ) {
             for ( Animal animal : animalArr ) {
                 if(animal!=null)
@@ -84,6 +76,13 @@ public class WorldSimulator {
                     animal.setHasUpdated(false);
                 }
             }
+        }
+        if(grassFlip.getState())
+        {
+            // random pos in range
+            int x = (int) (Math.random() * worldData.getXSize());
+            int y = (int) (Math.random() * worldData.getYSize());
+            worldData.addGrass(x,y);
         }
     }
 
@@ -138,6 +137,9 @@ public class WorldSimulator {
     public Animal[] getAnimalsInRange(int x, int y, int range) {
         return worldData.getAnimalsInRange(x, y, range);
     }
+    public Animal[] getAnimalsInRangeExclusive(int x, int y, int range, Animal animal) {
+        return worldData.getAnimalsInRangeExclusive(x, y, range, animal);
+    }
     public Grass[] getGrassInRange(int x, int y, int range) {
         return worldData.getGrassInRange(x, y, range);
     }
@@ -152,6 +154,9 @@ public class WorldSimulator {
 
     public int getDay(){
         return day;
+    }
+    public void setDay(int day){
+        this.day = day;
     }
 
     public double getSimSpeed() {
@@ -168,6 +173,12 @@ public class WorldSimulator {
 
     public void saveToFile(String fileName) {
         worldData.saveToFile(fileName);
+    }
+    public void reloadWorld(){
+        worldData.reloadWorld();
+    }
+    public void step(){
+        simUpdate();
     }
 
     public void adjustWindowSize(){

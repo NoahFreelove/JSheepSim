@@ -92,7 +92,10 @@ public class Animal extends Entity {
             }
             if(this instanceof Sheep sheep)
             {
-                sheep.lookForGrass();
+                if(sheep.lookForGrass())
+                {
+                    return;
+                }
             }
             // If they aren't a hunter, move randomly
             randomMove();
@@ -108,6 +111,8 @@ public class Animal extends Entity {
             }
         }
         else {
+
+            // Just in case the animal is dead, but the daysToLive is negative
             die();
         }
     }
@@ -163,7 +168,7 @@ public class Animal extends Entity {
         if(!hasEaten())
             return false;
 
-        for (Animal a: worldSimulator.getAnimalsInRange(getPos().x, getPos().y, 1)){
+        for (Animal a: worldSimulator.getAnimalsInRangeExclusive(getPos().x, getPos().y, 1, this)){
             if(a == null)
                 continue;
 
@@ -172,13 +177,10 @@ public class Animal extends Entity {
                 if(a.hasEaten())
                 {
                     // Parents cannot breed with their children
-                    if((a.child != this && child != a && !a.isChild) || child == null)
+                    if(a.child != this && child != a && !a.isChild && !isChild)
                     {
-                        if(a != this)
-                        {
-                            child = b.breed(this);
-                            setHasEaten(false);
-                        }
+                        child = b.breed(this);
+                        setHasEaten(false);
                     }
                 }
             }

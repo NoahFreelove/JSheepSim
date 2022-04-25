@@ -54,7 +54,7 @@ public class WorldData {
     }
 
     public boolean addAnimal(Animal animal) {
-        if (animal.getX() < xSize && animal.getY() < ySize) {
+        if (animal.getX() < xSize && animal.getY() < ySize && animal.getX()>=0 && animal.getY()>=0) {
             animals[animal.getX()][animal.getY()] = animal;
             worldSimulator.getScene().add(animal);
             return true;
@@ -73,8 +73,11 @@ public class WorldData {
 
     public boolean removeAnimal(Animal animal) {
         if (animal.getX() < xSize && animal.getY() < ySize) {
-            animals[animal.getX()][animal.getY()] = null;
             worldSimulator.getScene().remove(animal);
+            // Make sure we remove the animal
+            worldSimulator.getScene().remove(animals[animal.getX()][animal.getY()]);
+            animals[animal.getX()][animal.getY()] = null;
+
             return true;
         }
         return false;
@@ -123,6 +126,22 @@ public class WorldData {
     }
 
     public Coord getAvailableSpotInRange(int x, int y, int range) {
+        if(range<=0) {
+            return new Coord(-1,-1);
+        }
+        // prioritize left, right, up, down
+        if (!isOccupied(x - 1, y)) {
+            return new Coord(x - 1, y);
+        }
+        else if (!isOccupied(x + 1, y)) {
+            return new Coord(x + 1, y);
+        }
+        else if (!isOccupied(x, y - 1)) {
+            return new Coord(x, y - 1);
+        }
+        else if (!isOccupied(x, y + 1)) {
+            return new Coord(x, y + 1);
+        }
         for(int i = x - range; i <= x + range; i++) {
             for(int j = y - range; j <= y + range; j++) {
                 if(!isOccupied(i,j)) {
@@ -147,6 +166,27 @@ public class WorldData {
             }
         }
         return animalsInRange;
+    }
+
+    public Animal[] getAnimalsInRangeExclusive(int x, int y, int range, Animal animal){
+        Animal[] animalsInRange = new Animal[xSize*ySize];
+        int index = 0;
+        for(int i = x - range; i <= x + range; i++) {
+            for(int j = y - range; j <= y + range; j++) {
+                if(i >= 0 && j >= 0 && i < xSize && j < ySize) {
+                    if(isOccupied(i,j) && animals[i][j] != animal) {
+                        animalsInRange[index] = animals[i][j];
+                        index++;
+                    }
+                }
+            }
+        }
+        // remove nulls
+        Animal[] animalsInRange2 = new Animal[index];
+        for(int i = 0; i < index; i++) {
+            animalsInRange2[i] = animalsInRange[i];
+        }
+        return animalsInRange2;
     }
 
     public Grass[] getGrassInRange(int x, int y, int range) {
@@ -281,15 +321,20 @@ public class WorldData {
             ySize = scanner.nextInt();
             tileSize = scanner.nextInt();
             seed = scanner.nextLong();
-            worldSimulator.getScene().purge();
-            worldSimulator.adjustWindowSize();
-            generateAnimals(seed);
-            generateGrass(seed);
+            reloadWorld();
             System.out.println("World Data: Loaded from file");
             scanner.close();
         } catch (FileNotFoundException e) {
             System.out.println("World Data: Load File not found");
         }
+    }
+
+    public void reloadWorld(){
+        worldSimulator.setDay(0);
+        worldSimulator.getScene().purge();
+        worldSimulator.adjustWindowSize();
+        generateAnimals(seed);
+        generateGrass(seed);
     }
 
     public void saveToFile(String filename){

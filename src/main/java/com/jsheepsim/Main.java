@@ -44,6 +44,8 @@ public class Main extends Application {
                 case ESCAPE -> JUtility.exitApp();
                 case F1 -> Main.worlds[selectedWorld].startSimulation();
                 case F2 -> Main.worlds[selectedWorld].pauseSimulation();
+                case F3 -> Main.worlds[selectedWorld].reloadWorld();
+                case F4 -> Main.worlds[selectedWorld].step();
                 case DIGIT1 -> switchWorld(0);
                 case DIGIT2 -> switchWorld(1);
                 case DIGIT3 -> switchWorld(2);
