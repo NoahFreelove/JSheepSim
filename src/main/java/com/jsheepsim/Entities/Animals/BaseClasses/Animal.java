@@ -168,19 +168,19 @@ public abstract class Animal extends Entity {
 
     protected boolean lookForMate()
     {
-        if(!hasEaten())
+        if(!hasEaten() || !worldSettings.allowMating())
             return false;
 
-        for (Animal a: worldSimulator.getAnimalsInRangeExclusive(getPos().x, getPos().y, 1, this)){
-            if(a == null || a == this)
+        for (Animal a: worldSimulator.getAnimalsInRange(getPos().x, getPos().y, 1)){
+            if(a == null || (a == this && !worldSettings.parthenogenesis()))
                 continue;
 
             if(a.getClass() == getClass())
             {
                 if(a.hasEaten())
                 {
-                    // Parents cannot breed with their children
-                    if(a.child != this && child != a && !a.isChild && !isChild)
+                    // Parents cannot breed with their children, unless allowed
+                    if(worldSettings.allowIncest() || (a.child != this && child != a && !a.isChild && !isChild))
                     {
                         child = a.breed(this);
                         setHasEaten(false);

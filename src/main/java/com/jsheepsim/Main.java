@@ -26,7 +26,7 @@ public class Main extends Application {
         // Sim name, World seed, XSize, YSize, TileSize, Ticks/Second
         WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,1);
         WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 24,24,32,3);
-        WorldSimulator sim3 = new WorldSimulator("Sim 4", 2, 8,8,32,2);
+        WorldSimulator sim3 = new WorldSimulator("Sim 3", 2, 8,8,32,2);
 
         worlds[0] = sim1;
         worlds[1] = sim2;

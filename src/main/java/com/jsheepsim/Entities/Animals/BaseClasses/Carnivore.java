@@ -18,12 +18,15 @@ public class Carnivore extends Animal {
     }
 
     public boolean hunt() {
+        if(!worldSettings.allowHunting())
+            return false;
+
         for (Animal a:worldSimulator.getAnimalsInRange(getX(), getY(), 1)) {
             if(a!=null && a!= this){
                 // Dont hunt friendlies and dont hunt stronger animals
-                if(a.getClass() != getClass() && a.getFoodChainLevel() < getFoodChainLevel()){
+                if((a.getClass() != getClass() || worldSettings.allowEatingOwnKind()) && ((a.getFoodChainLevel() < getFoodChainLevel()) || worldSettings.ignoreFoodChainLevel())){
                     a.attacked(this);
-                    setHasEaten(true);
+                    setHasEaten(false);
                     moveAbsolute(a.getX(),a.getY());
                     return true;
                 }

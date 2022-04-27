@@ -211,11 +211,8 @@ public class WorldData {
             for(int j = 0; j < ySize; j++) {
                 int result = random.nextInt(100);
                 Animal newAnimal = null;
-                if(result < 6) {
+                if(result < 7) {
                     newAnimal = new Sheep(new Coord(i,j), worldSimulator, "sheep", false);
-                }
-                else if(result < 10) {
-                    newAnimal = new Bunny(new Coord(i,j), worldSimulator, "bunny",false);
                 }
                 else if(result < 13) {
                     newAnimal = new Wolf(new Coord(i,j), worldSimulator, "wolf",false);

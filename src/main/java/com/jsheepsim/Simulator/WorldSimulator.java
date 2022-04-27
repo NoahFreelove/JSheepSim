@@ -18,13 +18,14 @@ public class WorldSimulator {
 
     private int day = 1; // Current day
 
+    private final WorldSettings worldSettings;
     // Grid is 16x16, 32x32 pixels per square
     public WorldSimulator(String sceneName, long worldSeed, int xSize, int ySize, int tileSize, double simSpeed) {
         if(worldSeed == 0)
         {
             worldSeed = System.currentTimeMillis();
         }
-
+        this.worldSettings = new WorldSettings();
         this.scene = new JScene(500, sceneName);
         this.simSpeed = simSpeed;
         this.grassFlip = new FlipFlop();
@@ -51,7 +52,7 @@ public class WorldSimulator {
             if(!isRunning)
                 continue;
             simUpdate();
-            EventHandler.startEvent(this);
+            WorldEvent.createNewEvent(this);
             Thing.LogExtra("Simulation Update");
         }
     }
@@ -195,5 +196,9 @@ public class WorldSimulator {
     @Override
     public String toString(){
         return String.format("World: '%s' - Day: %d", getScene().getSceneName(), day);
+    }
+
+    public WorldSettings getWorldSettings() {
+        return worldSettings;
     }
 }

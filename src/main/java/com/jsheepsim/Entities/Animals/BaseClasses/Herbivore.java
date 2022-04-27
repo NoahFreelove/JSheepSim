@@ -18,6 +18,9 @@ public class Herbivore extends Animal {
     }
 
     public boolean lookForPlants(){
+        if(!worldSettings.allowEating())
+            return false;
+
         if(!hasEaten()){
             for (Plant g: worldSimulator.getPlantInRange(getX(), getY(), 1)){
                 if(g!=null){
