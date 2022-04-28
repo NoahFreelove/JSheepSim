@@ -2,16 +2,18 @@ package com.jsheepsim.Simulator;
 
 public class WorldSettings {
     private boolean allowMating = true; // Can animals reproduce in general?
-    private boolean allowEating = true; // Can animals eat?
+    private boolean allowEating = false; // Can animals eat?
     private boolean allowHunting = true; // Can animals attack others?
-    private boolean enableEvents = true; // Enable random events?
+    private boolean logEvents = true; // Should events be logged?
 
     // Setting any of these to true will negatively affect the simulation
+    private boolean enableEvents = false; // Enable random events?
     private boolean ignoreFoodChainLevel = false; // Ignore food chain level when determining if an animal can attack?
     private boolean allowIncest = false; // Can parents reproduce with their offspring?
     private boolean asexualReproduction = false; // Can animals reproduce asexually?
     private boolean allowEatingOwnSpecies = false; // Can animals eat their own kind?
     private boolean allowBreedingWithOtherSpecies = false; // Can animals breed with other species?
+    private boolean allowChildrenEatingAdults = false; // Can animals hunt when they're a child?
 
     public WorldSettings(){}
 
@@ -105,5 +107,43 @@ public class WorldSettings {
 
     public void setAllowBreedingWithOtherSpecies(boolean allowBreedingWithOtherSpecies) {
         this.allowBreedingWithOtherSpecies = allowBreedingWithOtherSpecies;
+    }
+
+    public boolean allowChildrenEatingAdults() {
+        return allowChildrenEatingAdults;
+    }
+
+    public void setAllowChildrenEatingAdults(boolean allowChildrenEatingAdults) {
+        this.allowChildrenEatingAdults = allowChildrenEatingAdults;
+    }
+
+    public boolean logEvents() {
+        return logEvents;
+    }
+
+    public void setLogEvents(boolean logEvents) {
+        this.logEvents = logEvents;
+    }
+    
+    @Override
+    public String toString(){
+        return String.format("""
+        World Settings:
+        Log Events: %b
+        Allow Mating: %b
+        Allow Eating: %b
+        Allow Hunting: %b
+        
+        * Changing the following will severely impact your simulation!*
+        Enable Events: %b
+        Ignore Food-chain level: %b
+        Asexual Reproduction: %b
+        Allow Eating Own Species: %b
+        Allow Breeding With Other Species: %b
+        Allow Incest: %b
+        Allow Children To Hunt Adults: %b%n
+        """,logEvents(), allowMating(), allowEating(), allowHunting(), enableEvents(),
+                ignoreFoodChainLevel(), asexualReproduction(), allowEatingOwnSpecies(),
+                allowBreedingWithOtherSpecies(), allowIncest(), allowChildrenEatingAdults());
     }
 }

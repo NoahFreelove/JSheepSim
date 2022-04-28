@@ -2,7 +2,7 @@ package com.jsheepsim.Entities.Animals.BaseClasses;
 
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
+import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
 import com.JEngine.Utility.GameMath;
 import com.jsheepsim.Entities.Entity;
 import com.jsheepsim.Simulator.Coord;
@@ -18,12 +18,13 @@ public abstract class Animal extends Entity {
     protected final int foodChainLevel;
 
     // Children stuff
-    protected Animal child = null;
-    protected boolean isChild = false;
+    protected Animal child = null; // If the animal has had a child, the reference to it is stored here
+    protected boolean isChild; // If the animal is a child
 
     // Age stuff
     private final int maxDaysToLive;
     private int daysToLive;
+    private int daysSinceLastMeal;
 
     // Animation stuff
     private float animProgress;
@@ -31,8 +32,8 @@ public abstract class Animal extends Entity {
     private Vector3 targetPosition;
     private float posOffset = 0f;
 
-    public Animal(JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath, int maxDaysToLive, boolean isChild, int foodChainLevel) {
-        super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 5), jIdentity, arrPos,wmRef, imagePath);
+    public Animal(Identity identity, Coord arrPos, WorldSimulator wmRef, File imagePath, int maxDaysToLive, boolean isChild, int foodChainLevel) {
+        super(Transform.simpleTransform(arrPos.x*wmRef.getWorldData().getTileSize(), arrPos.y*wmRef.getWorldData().getTileSize(), 5), identity, arrPos,wmRef, imagePath);
         previousPosition = getTransform().getPosition();
         targetPosition = getTransform().getPosition();
         this.foodChainLevel = foodChainLevel;
@@ -44,7 +45,7 @@ public abstract class Animal extends Entity {
         {
             daysToLive-=10;
         }
-        checkIfChild();
+        checkIfStillChild();
     }
 
     @Override
@@ -90,6 +91,7 @@ public abstract class Animal extends Entity {
                     randomMove();
                     return;
                 }
+                daysSinceLastMeal = 0;
                 // If they could hunt, don't move this day
                 return;
             }
@@ -97,7 +99,7 @@ public abstract class Animal extends Entity {
             {
                 if(herbivore.lookForPlants())
                 {
-                    return;
+                    daysSinceLastMeal = 0;
                 }
             }
             // If they aren't a hunter, move randomly
@@ -106,20 +108,29 @@ public abstract class Animal extends Entity {
     }
 
     private void checkLife() {
+        if(!isAlive)
+            return;
         if(daysToLive > 0) {
             daysToLive--;
-            checkIfChild();
+            daysSinceLastMeal++;
+            checkIfStillChild();
             if (daysToLive == 0) {
-                die();
+                die(DeathReason.OLD_AGE);
+            } else if (daysSinceLastMeal > 30)
+            {
+                die(DeathReason.STARVATION);
             }
         }
         else {
-
             // Just in case the animal is dead, but the daysToLive is negative
-            die();
+            die(DeathReason.OLD_AGE);
         }
     }
-    private void checkIfChild(){
+
+    /**
+     * Check if the animal has grown past the child stage
+     */
+    private void checkIfStillChild(){
         if(daysToLive>maxDaysToLive-10)
         {
             getTransform().setScale(new Vector3(0.5f,0.5f,0.5f));
@@ -140,10 +151,11 @@ public abstract class Animal extends Entity {
     }
 
 
-    protected void die()
+    protected void die(DeathReason reason)
     {
         isAlive = false;
         worldSimulator.removeAnimal(this);
+        worldSimulator.logEvent(String.format("%s died (%s)", getClass().getSimpleName(), reason.toString().toLowerCase()));
     }
     protected void randomMove()
     {
@@ -228,7 +240,7 @@ public abstract class Animal extends Entity {
     }
 
     public void attacked(Animal animal) {
-        die();
+        die(DeathReason.HUNTED);
     }
 
     protected abstract Animal breed(Animal animal);

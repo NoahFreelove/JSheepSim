@@ -1,6 +1,6 @@
 package com.jsheepsim.Entities.Animals;
 
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
+import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
 import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
 import com.jsheepsim.Entities.Animals.BaseClasses.Carnivore;
 import com.jsheepsim.Simulator.Coord;
@@ -10,7 +10,7 @@ import java.io.File;
 
 public class Monster extends Carnivore {
     public Monster(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
-        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/monster.png"), 3000, isChild, 10);
+        super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/monster.png"), 3000, isChild, 10);
     }
     @Override
     protected Animal breed(Animal animal) {

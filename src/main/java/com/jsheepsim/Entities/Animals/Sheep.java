@@ -1,6 +1,6 @@
 package com.jsheepsim.Entities.Animals;
 
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
+import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
 import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
 import com.jsheepsim.Entities.Animals.BaseClasses.Herbivore;
 import com.jsheepsim.Simulator.Coord;
@@ -11,7 +11,7 @@ import java.io.File;
 public class Sheep extends Herbivore {
 
     public Sheep(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
-        super(new JIdentity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"), 45, isChild, 1);
+        super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"), 100, isChild, 1);
     }
 
     @Override

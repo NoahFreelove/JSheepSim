@@ -77,11 +77,13 @@ public class WorldData {
     }
 
     public boolean removeAnimal(Animal animal) {
+        // Even if animal is out of bounds, it will be removed
+        worldSimulator.getScene().remove(animal);
+        // Make sure we remove the animal
+
         if (animal.getX() < xSize && animal.getY() < ySize) {
-            worldSimulator.getScene().remove(animal);
-            // Make sure we remove the animal
-            worldSimulator.getScene().remove(animals[animal.getX()][animal.getY()]);
             animals[animal.getX()][animal.getY()] = null;
+            worldSimulator.getScene().remove(animals[animal.getX()][animal.getY()]);
 
             return true;
         }

@@ -24,6 +24,8 @@ public class Console {
                 reload: reload world (F3)
                 step: simulate one day (F4)
                 setworld: start watching a world (num keys)
+                setspeed: set the simulation speed (>0)
+                enablelogging: enable logging
                 worldstatus: print the status of a world
                 status: print the status of the current world
                 settings: print world settings
@@ -37,8 +39,12 @@ public class Console {
         while (isRunning){
             Scanner s = new Scanner(System.in);
             System.out.print("> ");
-            String input = s.nextLine();
-            processInput(input);
+            try {
+                String input = s.nextLine();
+                processInput(input);
+            }catch (Exception e){
+                //ignore
+            }
         }
     }
 
@@ -54,6 +60,8 @@ public class Console {
             case "reload" -> Main.worlds[Main.selectedWorld].reloadWorld();
             case "step" -> Main.worlds[Main.selectedWorld].step();
             case "setworld" -> changeWorldNum();
+            case "setspeed" -> Main.worlds[Main.selectedWorld].setSimSpeed(getDouble());
+            case "enablelogging" -> Main.worlds[Main.selectedWorld].getWorldSettings().setLogEvents(getBoolean());
             case "worldstatus" -> worldStatus(-1);
             case "status" -> worldStatus(Main.selectedWorld);
             case "settings" -> getWorldSettings();
@@ -74,25 +82,7 @@ public class Console {
 
     void getWorldSettings(){
         WorldSettings ws = Main.worlds[Main.selectedWorld].getWorldSettings();
-        System.out.printf(
-        """
-        World Settings:
-        -Basic Settings-
-        Allow Mating: %b
-        Allow Eating: %b
-        Allow Hunting: %b
-        Enable Events: %b
-        
-        * Changing these will severely impact your simulation!*
-        -Advanced Settings-
-        Ignore Food-chain level: %b
-        Asexual Reproduction: %b
-        Allow Eating Own Species: %b
-        Allow Breeding With Other Species: %b
-        Allow Incest: %b%n
-        """, ws.allowMating(), ws.allowEating(), ws.allowHunting(), ws.enableEvents(),
-                ws.ignoreFoodChainLevel(), ws.asexualReproduction(), ws.allowEatingOwnSpecies(),
-                ws.allowBreedingWithOtherSpecies(), ws.allowIncest());
+        System.out.println(ws.toString());
     }
 
     void worldStatus(int defaultNum)
@@ -146,6 +136,28 @@ public class Console {
         {
             System.out.println("Invalid world number");
             return -1;
+        }
+    }
+
+    boolean getBoolean(){
+        System.out.print("new true/false value: ");
+        Scanner s = new Scanner(System.in);
+
+        return s.nextBoolean();
+    }
+
+    double getDouble(){
+        System.out.print("Ticks/Second: ");
+        Scanner s = new Scanner(System.in);
+        double newSpeed = s.nextDouble();
+        if(newSpeed > 0)
+        {
+            return newSpeed;
+        }
+        else
+        {
+            System.out.println("Invalid number");
+            return 1;
         }
     }
 

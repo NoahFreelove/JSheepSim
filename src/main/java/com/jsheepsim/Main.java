@@ -4,7 +4,7 @@ import com.JEngine.Game.Visual.GameCamera;
 import com.JEngine.Game.Visual.GameWindow;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
+import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
 import com.JEngine.Utility.About.GameInfo;
 import com.JEngine.Utility.Misc.GameUtility;
 import com.JEngine.Utility.Settings.EnginePrefs;
@@ -35,7 +35,7 @@ public class Main extends Application {
         GameWindow window = new GameWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(60);
 
-        new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
+        new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new Identity("Main Camera", "camera"));
 
         window.getStage().addEventHandler(KEY_PRESSED, (e) -> {
             switch (e.getCode()) {
@@ -73,12 +73,12 @@ public class Main extends Application {
 
         GameInfo.appName = "Sheep Simulator";
         GameInfo.authors = new String[]{"Noah Freelove"};
-        GameInfo.appVersionMinor = 1;
-        GameInfo.appVersionMajor = 0;
-        GameInfo.buildID = "2022.04.21";
+        GameInfo.appVersionMinor = 0;
+        GameInfo.appVersionMajor = 1;
+        GameInfo.buildID = "build 2022.04.28";
         GameInfo.year = 2022;
 
-        GameInfo.logAppInfo(true);
+        GameInfo.logGameInfo(true);
     }
 
     public static void switchWorld(int world)

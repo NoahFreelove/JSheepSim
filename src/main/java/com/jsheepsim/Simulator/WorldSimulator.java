@@ -59,6 +59,7 @@ public class WorldSimulator {
 
     private void simUpdate() {
         day++;
+        logEvent(String.format("Day: %d", day),true);
         for ( Animal[] animalArr : worldData.getAnimals() ) {
             for ( Animal animal : animalArr ) {
                 if(animal!=null)
@@ -191,6 +192,24 @@ public class WorldSimulator {
         int tileSize = getWorldData().getTileSize();
         SceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*tileSize + tileSize);
         SceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*tileSize + 80);
+    }
+
+    public void logEvent(String event){
+        if (!worldSettings.logEvents())
+            return;
+
+        System.out.printf("'%s': %s%n", getScene().getSceneName(), event);
+    }
+
+    public void logEvent(String event, boolean lineSeparator){
+        if (!worldSettings.logEvents())
+            return;
+        if(lineSeparator)
+        {
+            System.out.printf("\n\n'%s': %s%n", getScene().getSceneName(), event);
+            return;
+        }
+        System.out.printf("'%s': %s%n", getScene().getSceneName(), event);
     }
 
     @Override

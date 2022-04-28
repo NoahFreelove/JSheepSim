@@ -3,7 +3,7 @@ package com.jsheepsim.Entities;
 import com.JEngine.Game.PlayersAndPawns.Pawn;
 import com.JEngine.PrimitiveTypes.GameImage;
 import com.JEngine.PrimitiveTypes.Position.Transform;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
+import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
 import com.jsheepsim.Simulator.Coord;
 import com.jsheepsim.Simulator.WorldSettings;
 import com.jsheepsim.Simulator.WorldSimulator;
@@ -17,9 +17,9 @@ public class Entity extends Pawn {
     private boolean hasUpdated;
     protected final WorldSimulator worldSimulator;
     protected final WorldSettings worldSettings;
-    public Entity(Transform transform, JIdentity jIdentity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
-        super(transform, new GameImage(imagePath.getAbsolutePath(),wmRef.getWorldData().getTileSize(),wmRef.getWorldData().getTileSize()), jIdentity);
-        this.name = jIdentity.getName();
+    public Entity(Transform transform, Identity identity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
+        super(transform, new GameImage(imagePath.getAbsolutePath(),wmRef.getWorldData().getTileSize(),wmRef.getWorldData().getTileSize()), identity);
+        this.name = identity.getName();
         this.pos = arrPos;
         this.worldSettings = wmRef.getWorldSettings();
         this.worldSimulator = wmRef;
