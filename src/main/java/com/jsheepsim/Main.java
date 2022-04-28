@@ -1,19 +1,19 @@
 package com.jsheepsim;
 
-import com.JEngine.Game.Visual.JCamera;
-import com.JEngine.Game.Visual.JWindow;
-import com.JEngine.Game.Visual.Scenes.JSceneManager;
+import com.JEngine.Game.Visual.GameCamera;
+import com.JEngine.Game.Visual.GameWindow;
+import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.JEngine.Utility.About.JAppInfo;
-import com.JEngine.Utility.Misc.JUtility;
+import com.JEngine.Utility.About.GameInfo;
+import com.JEngine.Utility.Misc.GameUtility;
 import com.JEngine.Utility.Settings.EnginePrefs;
 import com.jsheepsim.Simulator.WorldSimulator;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import static javafx.scene.input.KeyEvent.*;
+import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 
 public class Main extends Application {
 
@@ -32,14 +32,14 @@ public class Main extends Application {
         worlds[1] = sim2;
         worlds[2] = sim3;
 
-        JWindow window = new JWindow(sim1.getScene(), 1,"SheepSim",stage);
+        GameWindow window = new GameWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(60);
 
-        new JCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
+        new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new JIdentity("Main Camera", "camera"));
 
         window.getStage().addEventHandler(KEY_PRESSED, (e) -> {
             switch (e.getCode()) {
-                case ESCAPE -> JUtility.exitApp();
+                case ESCAPE -> GameUtility.exitApp();
                 case F1 -> Main.worlds[selectedWorld].startSimulation();
                 case F2 -> Main.worlds[selectedWorld].pauseSimulation();
                 case F3 -> Main.worlds[selectedWorld].reloadWorld();
@@ -71,20 +71,20 @@ public class Main extends Application {
         EnginePrefs.logImportant = true;
         EnginePrefs.logInfo = false;
 
-        JAppInfo.appName = "Sheep Simulator";
-        JAppInfo.authors = new String[]{"Noah Freelove"};
-        JAppInfo.appVersionMinor = 1;
-        JAppInfo.appVersionMajor = 0;
-        JAppInfo.buildID = "2022.04.21";
-        JAppInfo.year = 2022;
+        GameInfo.appName = "Sheep Simulator";
+        GameInfo.authors = new String[]{"Noah Freelove"};
+        GameInfo.appVersionMinor = 1;
+        GameInfo.appVersionMajor = 0;
+        GameInfo.buildID = "2022.04.21";
+        GameInfo.year = 2022;
 
-        JAppInfo.logAppInfo(true);
+        GameInfo.logAppInfo(true);
     }
 
     public static void switchWorld(int world)
     {
         selectedWorld = world;
-        JSceneManager.setActiveScene(worlds[selectedWorld].getScene());
+        SceneManager.switchScene(worlds[selectedWorld].getScene());
         worlds[selectedWorld].adjustWindowSize();
     }
 

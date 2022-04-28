@@ -3,9 +3,9 @@ package com.jsheepsim.Entities.Animals.BaseClasses;
 import com.JEngine.PrimitiveTypes.Position.Transform;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.JIdentity;
-import com.JEngine.Utility.JMath;
-import com.jsheepsim.Simulator.Coord;
+import com.JEngine.Utility.GameMath;
 import com.jsheepsim.Entities.Entity;
+import com.jsheepsim.Simulator.Coord;
 import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.io.File;
@@ -52,7 +52,7 @@ public abstract class Animal extends Entity {
         if(animProgress<1)
         {
             animProgress+= 0.04f*worldSimulator.getSimSpeed();
-            Vector3 interpolatedPosition = JMath.interpolate(previousPosition, targetPosition, animProgress);
+            Vector3 interpolatedPosition = GameMath.interpolate(previousPosition, targetPosition, animProgress);
             interpolatedPosition.x += posOffset;
             interpolatedPosition.y += posOffset;
             getTransform().setPosition(interpolatedPosition);
@@ -172,7 +172,7 @@ public abstract class Animal extends Entity {
             return false;
 
         for (Animal a: worldSimulator.getAnimalsInRange(getPos().x, getPos().y, 1)){
-            if(a == null || (a == this && !worldSettings.parthenogenesis()))
+            if(a == null || (a == this && !worldSettings.asexualReproduction()))
                 continue;
 
             if(a.getClass() == getClass())

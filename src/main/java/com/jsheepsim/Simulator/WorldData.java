@@ -1,11 +1,17 @@
 package com.jsheepsim.Simulator;
 
-import com.jsheepsim.Entities.Animals.*;
 import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
+import com.jsheepsim.Entities.Animals.Bear;
+import com.jsheepsim.Entities.Animals.Sheep;
+import com.jsheepsim.Entities.Animals.Wolf;
 import com.jsheepsim.Entities.Fence;
+import com.jsheepsim.Entities.Plants.Grass;
 import com.jsheepsim.Entities.Plants.Plant;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -63,7 +69,7 @@ public class WorldData {
 
     public boolean addGrass(int x, int y) {
         if (x < xSize && y < ySize) {
-            plants[x][y] = new Plant(new Coord(x,y), worldSimulator);
+            plants[x][y] = new Grass(new Coord(x,y), worldSimulator);
             worldSimulator.getScene().add(plants[x][y]);
             return true;
         }

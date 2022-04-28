@@ -6,21 +6,33 @@ public class WorldSettings {
     private boolean allowHunting = true; // Can animals attack others?
     private boolean enableEvents = true; // Enable random events?
 
-    // Setting any of these to true will set of a great unbalance in the world
+    // Setting any of these to true will negatively affect the simulation
     private boolean ignoreFoodChainLevel = false; // Ignore food chain level when determining if an animal can attack?
     private boolean allowIncest = false; // Can parents reproduce with their offspring?
-    private boolean parthenogenesis = false; // Can animals reproduce asexually?
-    private boolean allowEatingOwnKind = true; // Can animals eat their own kind?
+    private boolean asexualReproduction = false; // Can animals reproduce asexually?
+    private boolean allowEatingOwnSpecies = false; // Can animals eat their own kind?
     private boolean allowBreedingWithOtherSpecies = false; // Can animals breed with other species?
 
     public WorldSettings(){}
-    public WorldSettings(boolean allowIncest, boolean allowMating, boolean allowEating, boolean allowHunting, boolean parthenogenesis, boolean enableEvents) {
-        this.allowIncest = allowIncest;
+
+    public WorldSettings(boolean allowMating, boolean allowEating, boolean allowHunting, boolean enableEvents, boolean ignoreFoodChainLevel, boolean allowIncest, boolean asexualReproduction, boolean allowEatingOwnSpecies, boolean allowBreedingWithOtherSpecies) {
         this.allowMating = allowMating;
         this.allowEating = allowEating;
         this.allowHunting = allowHunting;
-        this.parthenogenesis = parthenogenesis;
         this.enableEvents = enableEvents;
+        this.ignoreFoodChainLevel = ignoreFoodChainLevel;
+        this.allowIncest = allowIncest;
+        this.asexualReproduction = asexualReproduction;
+        this.allowEatingOwnSpecies = allowEatingOwnSpecies;
+        this.allowBreedingWithOtherSpecies = allowBreedingWithOtherSpecies;
+    }
+
+    public WorldSettings(boolean ignoreFoodChainLevel, boolean allowIncest, boolean asexualReproduction, boolean allowEatingOwnSpecies, boolean allowBreedingWithOtherSpecies) {
+        this.ignoreFoodChainLevel = ignoreFoodChainLevel;
+        this.allowIncest = allowIncest;
+        this.asexualReproduction = asexualReproduction;
+        this.allowEatingOwnSpecies = allowEatingOwnSpecies;
+        this.allowBreedingWithOtherSpecies = allowBreedingWithOtherSpecies;
     }
 
     public boolean allowIncest() {
@@ -55,12 +67,12 @@ public class WorldSettings {
         this.allowHunting = allowHunting;
     }
 
-    public boolean parthenogenesis() {
-        return parthenogenesis;
+    public boolean asexualReproduction() {
+        return asexualReproduction;
     }
 
-    public void setParthenogenesis(boolean parthenogenesis) {
-        this.parthenogenesis = parthenogenesis;
+    public void setAsexualReproduction(boolean asexualReproduction) {
+        this.asexualReproduction = asexualReproduction;
     }
 
     public boolean enableEvents() {
@@ -79,12 +91,12 @@ public class WorldSettings {
         this.ignoreFoodChainLevel = ignoreFoodChainLevel;
     }
 
-    public boolean allowEatingOwnKind() {
-        return allowEatingOwnKind;
+    public boolean allowEatingOwnSpecies() {
+        return allowEatingOwnSpecies;
     }
 
-    public void setAllowEatingOwnKind(boolean allowEatingOwnKind) {
-        this.allowEatingOwnKind = allowEatingOwnKind;
+    public void setAllowEatingOwnSpecies(boolean allowEatingOwnSpecies) {
+        this.allowEatingOwnSpecies = allowEatingOwnSpecies;
     }
 
     public boolean allowBreedingWithOtherSpecies() {

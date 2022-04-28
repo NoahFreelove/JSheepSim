@@ -1,14 +1,14 @@
 package com.jsheepsim.Simulator;
 
-import com.JEngine.Game.Visual.Scenes.JScene;
-import com.JEngine.Game.Visual.Scenes.JSceneManager;
+import com.JEngine.Game.Visual.Scenes.GameScene;
+import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.PrimitiveTypes.FlipFlop;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
 import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
 import com.jsheepsim.Entities.Plants.Plant;
 
 public class WorldSimulator {
-    private JScene scene; // Holds the Images and objects of the world
+    private GameScene scene; // Holds the Images and objects of the world
     private final WorldData worldData; // Handles the data of the world including movement
     private final FlipFlop grassFlip;
     private final Thread simulationThread; // Thread that runs the simulation
@@ -26,7 +26,7 @@ public class WorldSimulator {
             worldSeed = System.currentTimeMillis();
         }
         this.worldSettings = new WorldSettings();
-        this.scene = new JScene(500, sceneName);
+        this.scene = new GameScene(500, sceneName);
         this.simSpeed = simSpeed;
         this.grassFlip = new FlipFlop();
         worldData = new WorldData(xSize, ySize, tileSize, worldSeed, this);
@@ -36,11 +36,11 @@ public class WorldSimulator {
         startThread();
     }
 
-    public JScene getScene() {
+    public GameScene getScene() {
         return scene;
     }
 
-    public void setScene(JScene scene) {
+    public void setScene(GameScene scene) {
         this.scene = scene;
     }
 
@@ -154,7 +154,7 @@ public class WorldSimulator {
         return worldData;
     }
 
-    public boolean removeGrass(int x, int y) {
+    public boolean removePlant(int x, int y) {
         return worldData.removeGrass(x, y);
     }
 
@@ -189,8 +189,8 @@ public class WorldSimulator {
 
     public void adjustWindowSize(){
         int tileSize = getWorldData().getTileSize();
-        JSceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*tileSize + tileSize);
-        JSceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*tileSize + 80);
+        SceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*tileSize + tileSize);
+        SceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*tileSize + 80);
     }
 
     @Override
