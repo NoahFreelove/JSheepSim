@@ -10,7 +10,7 @@ import java.io.File;
 
 public class Bear extends Carnivore {
     public Bear(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
-        super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/bear.png"), 70, isChild, 3);
+        super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/bear.png"), 50, isChild, 3);
     }
     @Override
     protected Animal breed(Animal animal) {

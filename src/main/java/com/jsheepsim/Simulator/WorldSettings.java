@@ -2,9 +2,9 @@ package com.jsheepsim.Simulator;
 
 public class WorldSettings {
     private boolean allowMating = true; // Can animals reproduce in general?
-    private boolean allowEating = false; // Can animals eat?
+    private boolean allowEating = true; // Can animals eat?
     private boolean allowHunting = true; // Can animals attack others?
-    private boolean logEvents = true; // Should events be logged?
+    private boolean logEvents = false; // Should events be logged?
 
     // Setting any of these to true will negatively affect the simulation
     private boolean enableEvents = false; // Enable random events?

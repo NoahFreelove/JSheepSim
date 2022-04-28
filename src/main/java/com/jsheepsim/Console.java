@@ -28,7 +28,7 @@ public class Console {
                 enablelogging: enable logging
                 worldstatus: print the status of a world
                 status: print the status of the current world
-                settings: print world settings
+                getsettings: print world settings
                 load: load a world from a file
                 save: save a world to a file
                 gc: run the garbage collector
@@ -64,11 +64,19 @@ public class Console {
             case "enablelogging" -> Main.worlds[Main.selectedWorld].getWorldSettings().setLogEvents(getBoolean());
             case "worldstatus" -> worldStatus(-1);
             case "status" -> worldStatus(Main.selectedWorld);
-            case "settings" -> getWorldSettings();
+            case "getsettings" -> System.out.println(Main.worlds[Main.selectedWorld].getWorldSettings().toString());
             case "load" -> loadWorld();
             case "save" -> saveWorld();
-            case "gc" -> System.gc();
+            case "gc" -> gc();
         }
+    }
+
+    void gc(){
+        long beforeUsedMem=Runtime.getRuntime().totalMemory();
+        System.gc();
+        long afterUsedMem=Runtime.getRuntime().totalMemory();
+        long savedMemory = beforeUsedMem-afterUsedMem;
+        System.out.println("Freed " + savedMemory/1024/1024 + " MB");
     }
 
     void changeWorldNum()
@@ -78,11 +86,6 @@ public class Console {
         {
             Main.switchWorld(worldNum);
         }
-    }
-
-    void getWorldSettings(){
-        WorldSettings ws = Main.worlds[Main.selectedWorld].getWorldSettings();
-        System.out.println(ws.toString());
     }
 
     void worldStatus(int defaultNum)

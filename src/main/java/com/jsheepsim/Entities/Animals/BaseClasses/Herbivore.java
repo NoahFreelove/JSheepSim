@@ -28,7 +28,6 @@ public class Herbivore extends Animal {
                     setHasEaten(true);
                     if(!worldSimulator.isOccupied(g.getX(), g.getY())){
                         moveAbsolute(g.getX(),g.getY());
-                        System.out.println("Sheep ate plant");
                         return true;
                     }
                 }

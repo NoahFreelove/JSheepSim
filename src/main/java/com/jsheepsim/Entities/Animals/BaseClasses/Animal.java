@@ -116,7 +116,7 @@ public abstract class Animal extends Entity {
             checkIfStillChild();
             if (daysToLive == 0) {
                 die(DeathReason.OLD_AGE);
-            } else if (daysSinceLastMeal > 30)
+            } else if (daysSinceLastMeal > 20)
             {
                 die(DeathReason.STARVATION);
             }
@@ -187,9 +187,9 @@ public abstract class Animal extends Entity {
             if(a == null || (a == this && !worldSettings.asexualReproduction()))
                 continue;
 
-            if(a.getClass() == getClass())
+            if(a.getClass() == getClass() || worldSettings.allowBreedingWithOtherSpecies())
             {
-                if(a.hasEaten())
+                if(a.hasEaten() && a.isAlive)
                 {
                     // Parents cannot breed with their children, unless allowed
                     if(worldSettings.allowIncest() || (a.child != this && child != a && !a.isChild && !isChild))
@@ -202,8 +202,6 @@ public abstract class Animal extends Entity {
         }
         return false;
     }
-
-
 
     protected boolean lookForFood()
     {

@@ -24,7 +24,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         setEnginePrefs();
         // Sim name, World seed, XSize, YSize, TileSize, Ticks/Second
-        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,1);
+        WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,10);
         WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 24,24,32,3);
         WorldSimulator sim3 = new WorldSimulator("Sim 3", 2, 8,8,32,2);
 
