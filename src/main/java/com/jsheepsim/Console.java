@@ -149,16 +149,16 @@ public class Console {
     }
 
     double getDouble(){
-        System.out.print("Ticks/Second: ");
+        System.out.print("Enter new Value (>0): ");
         Scanner s = new Scanner(System.in);
-        double newSpeed = s.nextDouble();
-        if(newSpeed > 0)
+        double newValue = s.nextDouble();
+        if(newValue > 0)
         {
-            return newSpeed;
+            return newValue;
         }
         else
         {
-            System.out.println("Invalid number");
+            System.out.println("Set as 1 (invalid input)");
             return 1;
         }
     }

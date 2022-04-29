@@ -234,7 +234,7 @@ public abstract class Animal extends Entity {
 
     @Override
     public String toString(){
-        return String.format("%s '%s' - IsChild:%b - HasEaten:%b - DaysToLive:%d", getClass().getSimpleName(), getIdentity().getName(), isChild, hasEaten, daysToLive);
+        return String.format("%s '%s' - Is Child:%b - Has Eaten:%b - Days To Live:%d - Last Ate:%d", getClass().getSimpleName(), getIdentity().getName(), isChild, hasEaten, daysToLive,daysSinceLastMeal);
     }
 
     public void attacked(Animal animal) {
