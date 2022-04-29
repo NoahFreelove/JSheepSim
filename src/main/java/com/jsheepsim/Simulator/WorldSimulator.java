@@ -3,6 +3,7 @@ package com.jsheepsim.Simulator;
 import com.JEngine.Game.Visual.Scenes.GameScene;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.PrimitiveTypes.FlipFlop;
+import com.JEngine.PrimitiveTypes.Position.Vector2;
 import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
 import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
 import com.jsheepsim.Entities.Plants.Plant;
@@ -192,6 +193,12 @@ public class WorldSimulator {
         int tileSize = getWorldData().getTileSize();
         SceneManager.getWindow().getStage().setWidth(getWorldData().getXSize()*tileSize + tileSize);
         SceneManager.getWindow().getStage().setHeight(getWorldData().getYSize()*tileSize + 80);
+    }
+
+    public Vector2 getWindowSize(){
+        int tileSize = getWorldData().getTileSize();
+        return new Vector2(getWorldData().getXSize()*tileSize + tileSize, getWorldData().getYSize()*tileSize + 80);
+
     }
 
     public void logEvent(String event){

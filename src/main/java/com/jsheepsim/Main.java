@@ -8,6 +8,7 @@ import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
 import com.JEngine.Utility.About.GameInfo;
 import com.JEngine.Utility.Misc.GameUtility;
 import com.JEngine.Utility.Settings.EnginePrefs;
+import com.jsheepsim.Simulator.Pointer;
 import com.jsheepsim.Simulator.WorldSimulator;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
@@ -17,12 +18,17 @@ import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 
 public class Main extends Application {
 
-    public static WorldSimulator[] worlds = new WorldSimulator[4];
-    public static int selectedWorld = 0;
+    public static WorldSimulator[] worlds = new WorldSimulator[4]; // Holds different simulator instances
+
+    public static int selectedWorld = 0; // current spectated world
+
+    public static Pointer pointer;
+    public static GameCamera camera;
 
     @Override
     public void start(Stage stage) {
         setEnginePrefs();
+
         // Sim name, World seed, XSize, YSize, TileSize, Ticks/Second
         WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,10);
         WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 24,24,32,3);
@@ -35,7 +41,16 @@ public class Main extends Application {
         GameWindow window = new GameWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(60);
 
-        new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new Identity("Main Camera", "camera"));
+        camera = new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new Identity("Main Camera", "camera"));
+
+        pointer = new Pointer(null, sim1);
+        //camera.setParent(pointer);
+        sim1.getScene().add(pointer);
+        sim1.getScene().add(camera);
+        sim2.getScene().add(pointer);
+        sim2.getScene().add(camera);
+        sim3.getScene().add(pointer);
+        sim3.getScene().add(camera);
 
         window.getStage().addEventHandler(KEY_PRESSED, (e) -> {
             switch (e.getCode()) {
@@ -44,13 +59,13 @@ public class Main extends Application {
                 case F2 -> Main.worlds[selectedWorld].pauseSimulation();
                 case F3 -> Main.worlds[selectedWorld].reloadWorld();
                 case F4 -> Main.worlds[selectedWorld].step();
-                case DIGIT1 -> switchWorld(0);
-                case DIGIT2 -> switchWorld(1);
-                case DIGIT3 -> switchWorld(2);
+                case DIGIT1 -> setSpectatedWorld(0);
+                case DIGIT2 -> setSpectatedWorld(1);
+                case DIGIT3 -> setSpectatedWorld(2);
             }
         });
         window.setBackgroundColor(Color.web("#006400"));
-        switchWorld(0);
+        setSpectatedWorld(0);
 
         Thread consoleThread = new Thread(() -> {
             Console console = new Console();
@@ -81,10 +96,11 @@ public class Main extends Application {
         GameInfo.logGameInfo(true);
     }
 
-    public static void switchWorld(int world)
+    public static void setSpectatedWorld(int world)
     {
         selectedWorld = world;
         SceneManager.switchScene(worlds[selectedWorld].getScene());
+        pointer.setWorldSimulator(worlds[selectedWorld]);
         worlds[selectedWorld].adjustWindowSize();
     }
 

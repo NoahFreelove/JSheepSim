@@ -6,7 +6,6 @@ import com.jsheepsim.Entities.Animals.Bear;
 import com.jsheepsim.Entities.Animals.Bunny;
 import com.jsheepsim.Entities.Animals.Sheep;
 import com.jsheepsim.Entities.Animals.Wolf;
-import com.jsheepsim.Simulator.WorldSettings;
 import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.util.Scanner;
@@ -84,7 +83,7 @@ public class Console {
         int worldNum = getWorldNum();
         if(worldNum != -1)
         {
-            Main.switchWorld(worldNum);
+            Main.setSpectatedWorld(worldNum);
         }
     }
 
