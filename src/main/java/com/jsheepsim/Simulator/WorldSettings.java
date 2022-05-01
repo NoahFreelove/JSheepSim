@@ -1,5 +1,9 @@
 package com.jsheepsim.Simulator;
 
+/**
+ * WorldSettings manages the simulation settings for a world.
+ * These settings can range from not affecting the sim much to being destructive.
+ */
 public class WorldSettings {
     private boolean allowMating = true; // Can animals reproduce in general?
     private boolean allowEating = true; // Can animals eat?
@@ -7,36 +11,52 @@ public class WorldSettings {
     private boolean logEvents = false; // Should events be logged?
 
     // Setting any of these to true will negatively affect the simulation
-    private boolean enableEvents = false; // Enable random events?
+    private boolean enableEvents = true; // Enable random events?
     private boolean ignoreFoodChainLevel = false; // Ignore food chain level when determining if an animal can attack?
     private boolean allowIncest = false; // Can parents reproduce with their offspring?
     private boolean asexualReproduction = false; // Can animals reproduce asexually?
     private boolean allowEatingOwnSpecies = false; // Can animals eat their own kind?
     private boolean allowBreedingWithOtherSpecies = false; // Can animals breed with other species?
-    private boolean allowChildrenEatingAdults = false; // Can animals hunt when they're a child?
+    private boolean allowChildrenHunting = false; // Can animals hunt when they're a child?
 
+    // Use default settings
     public WorldSettings(){}
 
-    public WorldSettings(boolean allowMating, boolean allowEating, boolean allowHunting, boolean enableEvents, boolean ignoreFoodChainLevel, boolean allowIncest, boolean asexualReproduction, boolean allowEatingOwnSpecies, boolean allowBreedingWithOtherSpecies) {
+    // Change the important settings
+    public WorldSettings(boolean allowMating, boolean allowEating, boolean allowHunting, boolean logEvents) {
         this.allowMating = allowMating;
         this.allowEating = allowEating;
         this.allowHunting = allowHunting;
+        this.logEvents = logEvents;
+    }
+
+    // Change the advanced settings
+    public WorldSettings(boolean enableEvents, boolean ignoreFoodChainLevel, boolean allowIncest, boolean asexualReproduction, boolean allowEatingOwnSpecies, boolean allowBreedingWithOtherSpecies, boolean allowChildrenHunting) {
         this.enableEvents = enableEvents;
         this.ignoreFoodChainLevel = ignoreFoodChainLevel;
         this.allowIncest = allowIncest;
         this.asexualReproduction = asexualReproduction;
         this.allowEatingOwnSpecies = allowEatingOwnSpecies;
         this.allowBreedingWithOtherSpecies = allowBreedingWithOtherSpecies;
+        this.allowChildrenHunting = allowChildrenHunting;
     }
 
-    public WorldSettings(boolean ignoreFoodChainLevel, boolean allowIncest, boolean asexualReproduction, boolean allowEatingOwnSpecies, boolean allowBreedingWithOtherSpecies) {
+    // Change all settings
+    public WorldSettings(boolean allowMating, boolean allowEating, boolean allowHunting, boolean logEvents, boolean enableEvents, boolean ignoreFoodChainLevel, boolean allowIncest, boolean asexualReproduction, boolean allowEatingOwnSpecies, boolean allowBreedingWithOtherSpecies, boolean allowChildrenHunting) {
+        this.allowMating = allowMating;
+        this.allowEating = allowEating;
+        this.allowHunting = allowHunting;
+        this.logEvents = logEvents;
+        this.enableEvents = enableEvents;
         this.ignoreFoodChainLevel = ignoreFoodChainLevel;
         this.allowIncest = allowIncest;
         this.asexualReproduction = asexualReproduction;
         this.allowEatingOwnSpecies = allowEatingOwnSpecies;
         this.allowBreedingWithOtherSpecies = allowBreedingWithOtherSpecies;
+        this.allowChildrenHunting = allowChildrenHunting;
     }
 
+    // Getters and setters
     public boolean allowIncest() {
         return allowIncest;
     }
@@ -109,12 +129,12 @@ public class WorldSettings {
         this.allowBreedingWithOtherSpecies = allowBreedingWithOtherSpecies;
     }
 
-    public boolean allowChildrenEatingAdults() {
-        return allowChildrenEatingAdults;
+    public boolean allowChildrenHunting() {
+        return allowChildrenHunting;
     }
 
-    public void setAllowChildrenEatingAdults(boolean allowChildrenEatingAdults) {
-        this.allowChildrenEatingAdults = allowChildrenEatingAdults;
+    public void setAllowChildrenHunting(boolean allowChildrenHunting) {
+        this.allowChildrenHunting = allowChildrenHunting;
     }
 
     public boolean logEvents() {
@@ -141,9 +161,9 @@ public class WorldSettings {
         Allow Eating Own Species: %b
         Allow Breeding With Other Species: %b
         Allow Incest: %b
-        Allow Children To Hunt Adults: %b%n
+        Allow Children To Hunt: %b%n
         """,logEvents(), allowMating(), allowEating(), allowHunting(), enableEvents(),
                 ignoreFoodChainLevel(), asexualReproduction(), allowEatingOwnSpecies(),
-                allowBreedingWithOtherSpecies(), allowIncest(), allowChildrenEatingAdults());
+                allowBreedingWithOtherSpecies(), allowIncest(), allowChildrenHunting());
     }
 }

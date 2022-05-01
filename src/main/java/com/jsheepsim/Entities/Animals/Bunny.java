@@ -9,10 +9,12 @@ import com.jsheepsim.Simulator.WorldSimulator;
 import java.io.File;
 
 public class Bunny extends Herbivore {
+    // Bunny is not currently used in the world generation process because it gave too much food for the carnivores
     public Bunny(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
         super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/bunny.png"), 45, isChild, 1);
     }
 
+    // Creates a new bunny and adds it to the world
     @Override
     public Animal breed(Animal animal) {
         setHasEaten(false);

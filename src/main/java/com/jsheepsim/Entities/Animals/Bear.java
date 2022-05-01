@@ -12,6 +12,7 @@ public class Bear extends Carnivore {
     public Bear(Coord arrPos, WorldSimulator worldSimulator, String name, boolean isChild) {
         super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/bear.png"), 50, isChild, 3);
     }
+    // Creates a new bear and adds it into the world
     @Override
     protected Animal breed(Animal animal) {
         setHasEaten(false);

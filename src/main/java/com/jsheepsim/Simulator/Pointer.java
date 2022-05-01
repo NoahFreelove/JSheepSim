@@ -1,28 +1,28 @@
 package com.jsheepsim.Simulator;
 
+import com.JEngine.Game.Visual.GameCamera;
 import com.JEngine.Game.Visual.MousePointer;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
 import com.JEngine.PrimitiveTypes.FlipFlop;
 import com.JEngine.PrimitiveTypes.GameImage;
+import com.JEngine.PrimitiveTypes.Position.Direction;
 import com.JEngine.PrimitiveTypes.Position.Vector2;
 import com.JEngine.PrimitiveTypes.Position.Vector3;
+import com.JEngine.Utility.Input;
+import javafx.scene.input.KeyCode;
 
+/**
+ * Pointer class has functions related to the mouse cursor.
+ */
 public class Pointer extends MousePointer {
 
-    private WorldSimulator activeWorld;
-    Vector2 windowSize;
-    /**
-     * Create a new cursor
-     *
-     * @param cursorIcon The image of the cursor
-     */
-    public Pointer(GameImage cursorIcon, WorldSimulator activeWorld) {
+    public Pointer(GameImage cursorIcon) {
         super(cursorIcon);
-        this.activeWorld = activeWorld;
     }
 
     FlipFlop flipFlop = new FlipFlop();
 
+    // When the mouse is pressed, change the zoom level between 1 and 2
     @Override
     protected void onMouseReleased(){
         if(flipFlop.getState())
@@ -35,18 +35,33 @@ public class Pointer extends MousePointer {
         }
     }
 
+    // When you press F5, reset the camera details
+    @Override
+    public void onKeyPressed(KeyCode key) {
+        if(key == KeyCode.F5){
+            SceneManager.getActiveCamera().setPosition(new Vector3(0,0,0));
+            SceneManager.getActiveCamera().setZoom(new Vector2(1,1));
+            flipFlop.setState(false);
+        }
+    }
+
+    // Will run every frame, not every simulation step
     @Override
     public void Update() {
-        Vector2 offset = new Vector2(0, 0);
-        offset.x = (windowSize.x / 2);
-        offset.y = (windowSize.y / 2);
-        //setPosition(new Vector3((float) getX()+offset.x, (float) getY()+offset.y, 0));
-    }
-    public WorldSimulator getActiveWorld() {
-        return activeWorld;
-    }
-    public void setWorldSimulator(WorldSimulator activeWorld) {
-        this.activeWorld = activeWorld;
-        windowSize = activeWorld.getWindowSize();
+        // Listen for key presses and move the camera accordingly
+        GameCamera c = SceneManager.getActiveCamera();
+        Vector3 pos = c.getPosition();
+        if(Input.A_Pressed){
+            c.setPosition(new Vector3(pos.x-10,pos.y, 0));
+        }
+        if(Input.D_Pressed){
+            c.setPosition(new Vector3(pos.x+10,pos.y, 0));
+        }
+        if(Input.W_Pressed){
+            c.setPosition(new Vector3(pos.x,pos.y-10, 0));
+        }
+        if(Input.S_Pressed){
+            c.setPosition(new Vector3(pos.x,pos.y+10, 0));
+        }
     }
 }

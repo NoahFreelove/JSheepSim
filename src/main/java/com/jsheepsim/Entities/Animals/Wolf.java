@@ -13,6 +13,7 @@ public class Wolf extends Carnivore {
         super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/wolf.png"), 50, isChild, 2);
     }
 
+    // Add a new wolf into the world
     @Override
     protected Animal breed(Animal animal) {
         setHasEaten(false);

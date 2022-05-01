@@ -17,10 +17,11 @@ public class Monster extends Carnivore {
         return null;
     }
 
+    // The monster is different from the other animals in that it can't breed, and can hunt in a 3 tile radius
     @Override
     public boolean hunt(){
         for (Animal a:worldSimulator.getAnimalsInRange(getX(), getY(), 3)) {
-            // Monster will attack any animal within 3 tiles including its own species
+            // Monster will attack any animal within 3 tiles including other monsters and fences
             if(a!=null && a!= this){
                 a.attacked(this);
                 setHasEaten(false);

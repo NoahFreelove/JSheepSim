@@ -15,14 +15,18 @@ import java.io.PrintWriter;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * WorldData class holds all of a simulation's world data and handles the heavy operations of the world.
+ * Ex. Moving animals, checking occupancy, etc.
+ */
 public class WorldData {
-    private int xSize;
-    private int ySize;
-    private int tileSize;
-    private Animal[][] animals;
-    private Plant[][] plants;
-    private long seed;
-    private final WorldSimulator worldSimulator;
+    private int xSize; // Width of the world
+    private int ySize; // Height of the world
+    private int tileSize; // Size of each tile in pixels
+    private Animal[][] animals; // 2D array of animals
+    private Plant[][] plants; // 2D array of plants
+    private long seed; // Seed for the world generator
+    private final WorldSimulator worldSimulator; // Reference to the WorldSimulator
 
     public WorldData(int xSize, int ySize, int tileSize, long seed, WorldSimulator worldSimulator) {
         this.xSize = xSize;
@@ -34,6 +38,7 @@ public class WorldData {
         plants = new Plant[xSize][ySize];
     }
 
+    // Getters and setters
     public int getXSize() {
         return xSize;
     }
@@ -58,6 +63,23 @@ public class WorldData {
         this.tileSize = tileSize;
     }
 
+    public Animal[][] getAnimals() {
+        return animals;
+    }
+
+    public void setAnimals(Animal[][] animals) {
+        this.animals = animals;
+    }
+
+    public Plant[][] getGrass() {
+        return plants;
+    }
+
+    public void setGrass(Plant[][] plants) {
+        this.plants = plants;
+    }
+
+    // Add a new animal into the world data
     public boolean addAnimal(Animal animal) {
         if (animal.getX() < xSize && animal.getY() < ySize && animal.getX()>=0 && animal.getY()>=0) {
             animals[animal.getX()][animal.getY()] = animal;
@@ -67,6 +89,7 @@ public class WorldData {
         return false;
     }
 
+    // Add new grass at a given coord
     public boolean addGrass(int x, int y) {
         if (x < xSize && y < ySize) {
             plants[x][y] = new Grass(new Coord(x,y), worldSimulator);
@@ -76,6 +99,7 @@ public class WorldData {
         return false;
     }
 
+    // Remove an animal from the world
     public boolean removeAnimal(Animal animal) {
         // Even if animal is out of bounds, it will be removed
         worldSimulator.getScene().remove(animal);
@@ -90,6 +114,7 @@ public class WorldData {
         return false;
     }
 
+    // move an animal to a new location, if the new location is empty
     public boolean moveAnimal(Animal animal, int x, int y) {
         if (animal.getX() < xSize && animal.getY() < ySize) {
             if(!isOccupied(x,y)) {
@@ -109,29 +134,14 @@ public class WorldData {
         return false;
     }
 
+    // check if a given location is occupied by an animal
     public boolean isOccupied(int x, int y) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0) {
             return animals[x][y] != null;
         }
         return true;
     }
-
-    public Animal[][] getAnimals() {
-        return animals;
-    }
-
-    public void setAnimals(Animal[][] animals) {
-        this.animals = animals;
-    }
-
-    public Plant[][] getGrass() {
-        return plants;
-    }
-
-    public void setGrass(Plant[][] plants) {
-        this.plants = plants;
-    }
-
+    // Checks for any free spaces in a range
     public Coord getAvailableSpotInRange(int x, int y, int range) {
         if(range<=0) {
             return new Coord(-1,-1);
@@ -159,6 +169,7 @@ public class WorldData {
         return new Coord(-1,-1);
     }
 
+    // get all the animals in a given range
     public Animal[] getAnimalsInRange(int x, int y, int range) {
         Animal[] animalsInRange = new Animal[xSize*ySize];
         int index = 0;
@@ -175,6 +186,7 @@ public class WorldData {
         return animalsInRange;
     }
 
+    // get all the animals in a given range excluding the one provided
     public Animal[] getAnimalsInRangeExclusive(int x, int y, int range, Animal animal){
         Animal[] animalsInRange = new Animal[xSize*ySize];
         int index = 0;
@@ -196,7 +208,8 @@ public class WorldData {
         return animalsInRange2;
     }
 
-    public Plant[] getGrassInRange(int x, int y, int range) {
+    // Get all plants in a radius
+    public Plant[] getPlantsInRange(int x, int y, int range) {
         Plant[] plantInRange = new Plant[xSize*ySize];
         int index = 0;
         for(int i = x - range; i <= x + range; i++) {
@@ -212,6 +225,7 @@ public class WorldData {
         return plantInRange;
     }
 
+    // Generate animals based off of a seeded random
     public void generateAnimals(long seed)
     {
         Random random = new Random(seed);
@@ -219,6 +233,12 @@ public class WorldData {
             for(int j = 0; j < ySize; j++) {
                 int result = random.nextInt(100);
                 Animal newAnimal = null;
+                /* Odds:
+                * 7% any space is a sheep
+                * 5% any space is a wolf
+                * 2% any space is a bear
+                * 5% any space is a fence
+                */
                 if(result < 7) {
                     newAnimal = new Sheep(new Coord(i,j), worldSimulator, "sheep", false);
                 }
@@ -239,7 +259,8 @@ public class WorldData {
         }
     }
 
-    public void generateGrass(long seed)
+    // Generate plants based off of a seeded random
+    public void generatePlants(long seed)
     {
         Random random = new Random((long)(seed*0.5* new Random().nextFloat()));
         for(int i = 0; i < xSize; i++) {
@@ -252,8 +273,8 @@ public class WorldData {
             }
         }
     }
-
-    public boolean removeGrass(int x, int y) {
+    // remove a plant at a given coordinate
+    public boolean removePlant(int x, int y) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0) {
             plants[x][y] = null;
             return true;
@@ -261,6 +282,7 @@ public class WorldData {
         return false;
     }
 
+    // Get all animals alive in the world
     public Animal[] getAliveAnimals(){
         Animal[] aliveAnimals = new Animal[xSize*ySize];
         int index = 0;
@@ -281,7 +303,7 @@ public class WorldData {
         }
         return aliveAnimalsNoNulls;
     }
-
+    // Get all animals of a certain species
     public Animal[] getAllAnimalsOfClass(Class<? extends Animal> animalClass){
         Animal[] animalArr = new Animal[xSize*ySize];
         int index = 0;
@@ -303,6 +325,7 @@ public class WorldData {
         return animalsNoNulls;
     }
 
+    // Get the first available spot in the world
     public Coord getAvailableSpotAnywhere(){
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
@@ -314,6 +337,7 @@ public class WorldData {
         return new Coord(-1,-1);
     }
 
+    // Load world data from a file. Does not save settings
     public void loadFromFile(String filename){
         File file = new File("save/" +filename);
         try {
@@ -330,14 +354,7 @@ public class WorldData {
         }
     }
 
-    public void reloadWorld(){
-        worldSimulator.setDay(0);
-        worldSimulator.getScene().purge();
-        worldSimulator.adjustWindowSize();
-        generateAnimals(seed);
-        generateGrass(seed);
-    }
-
+    // Save world data to a file. Does not save settings
     public void saveToFile(String filename){
         File file = new File("save/" +filename);
         try {
@@ -353,5 +370,12 @@ public class WorldData {
         }
     }
 
-
+    // Reload the world. Regenerates all plants and animals
+    public void reloadWorld(){
+        worldSimulator.setDay(0);
+        worldSimulator.getScene().purge();
+        worldSimulator.adjustWindowSize();
+        generateAnimals(seed);
+        generatePlants(seed);
+    }
 }

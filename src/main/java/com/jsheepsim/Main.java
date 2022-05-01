@@ -12,6 +12,7 @@ import com.jsheepsim.Simulator.Pointer;
 import com.jsheepsim.Simulator.WorldSimulator;
 import javafx.application.Application;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -22,29 +23,56 @@ public class Main extends Application {
 
     public static int selectedWorld = 0; // current spectated world
 
-    public static Pointer pointer;
-    public static GameCamera camera;
+    public static Pointer pointer; // create a new mouse cursor, so we can track its position
+    public static GameCamera camera; // create a camera instance to render the scene
 
     @Override
     public void start(Stage stage) {
-        setEnginePrefs();
+        setEnginePrefs(); // set engine info
 
+        // Create our simulator worlds
         // Sim name, World seed, XSize, YSize, TileSize, Ticks/Second
         WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,10);
         WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 24,24,32,3);
         WorldSimulator sim3 = new WorldSimulator("Sim 3", 2, 8,8,32,2);
 
+        // World array helps us keep track of our world instances
         worlds[0] = sim1;
         worlds[1] = sim2;
         worlds[2] = sim3;
 
+        // Start up the window
         GameWindow window = new GameWindow(sim1.getScene(), 1,"SheepSim",stage);
         window.setTargetFPS(60);
 
+        Text helpText = new Text(
+                """
+                Key Bindings:
+                [1] - Sim 1
+                [2] - Sim 2
+                [3] - Sim 3
+                
+                F1 - Start/Unpause sim
+                F2 - Pause sim
+                F3 - Reset Sim
+                F4 - Step Sim
+                F5 - Reset Camera
+                """
+        );
+        // Set text properties
+        helpText.setFill(Color.WHITE);
+        helpText.setStyle("-fx-font-weight: bold");
+        helpText.setTranslateX(5);
+        helpText.setTranslateY(10);
+
+        window.parent.getChildren().add(helpText);
+
+        // Init the camera
         camera = new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new Identity("Main Camera", "camera"));
 
-        pointer = new Pointer(null, sim1);
-        //camera.setParent(pointer);
+        pointer = new Pointer(null);
+
+        // Add the camera and pointer to every world which lets us track their position
         sim1.getScene().add(pointer);
         sim1.getScene().add(camera);
         sim2.getScene().add(pointer);
@@ -52,6 +80,7 @@ public class Main extends Application {
         sim3.getScene().add(pointer);
         sim3.getScene().add(camera);
 
+        // Set window key-binds
         window.getStage().addEventHandler(KEY_PRESSED, (e) -> {
             switch (e.getCode()) {
                 case ESCAPE -> GameUtility.exitApp();
@@ -65,11 +94,14 @@ public class Main extends Application {
             }
         });
         window.setBackgroundColor(Color.web("#006400"));
+
+        // Start spectating the first world by default. This is a very useful method!
         setSpectatedWorld(0);
 
+        // we want to start the console on a separate thread, so we can keep the game running as it infinitely looks for input
         Thread consoleThread = new Thread(() -> {
             Console console = new Console();
-            console.console();
+            console.startConsole();
         });
         consoleThread.start();
     }
@@ -78,29 +110,35 @@ public class Main extends Application {
         launch();
     }
 
+    /**
+     * You can ignore this method, it's just used to set the engine preferences
+     */
     private static void setEnginePrefs()
     {
         EnginePrefs.aggressiveGC = false;
         EnginePrefs.logDebug = false;
         EnginePrefs.logExtra = false;
         EnginePrefs.logImportant = true;
-        EnginePrefs.logInfo = false;
+        EnginePrefs.logInfo = true;
 
         GameInfo.appName = "Sheep Simulator";
         GameInfo.authors = new String[]{"Noah Freelove"};
-        GameInfo.appVersionMinor = 0;
+        GameInfo.appVersionMinor = 5;
         GameInfo.appVersionMajor = 1;
-        GameInfo.buildID = "build 2022.04.28";
+        GameInfo.buildID = "build 2022.05.01.1";
         GameInfo.year = 2022;
 
-        GameInfo.logGameInfo(true);
+        GameInfo.logGameInfo(false);
     }
 
+    /**
+     * Focus on a specific world. Makes the camera render the world and all key presses will be sent to the world.
+     * @param world world index in the worlds array
+     */
     public static void setSpectatedWorld(int world)
     {
         selectedWorld = world;
         SceneManager.switchScene(worlds[selectedWorld].getScene());
-        pointer.setWorldSimulator(worlds[selectedWorld]);
         worlds[selectedWorld].adjustWindowSize();
     }
 

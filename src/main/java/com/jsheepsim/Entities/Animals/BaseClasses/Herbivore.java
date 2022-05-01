@@ -12,24 +12,28 @@ public class Herbivore extends Animal {
         super(identity, arrPos, wmRef, imagePath, maxDaysToLive, isChild, foodChainLevel);
     }
 
+    // Let subclasses override this method to do their own thing
     @Override
     protected Animal breed(Animal animal) {
         return null;
     }
 
     public boolean lookForPlants(){
+        // If the world allows herbivores to eat plants, then we can look for plants
         if(!worldSettings.allowEating())
             return false;
-
+        // If the herbivore is not hungry, then we can't look for plants
         if(!hasEaten()){
-            for (Plant g: worldSimulator.getPlantInRange(getX(), getY(), 1)){
-                if(g!=null){
-                    g.eatPlant();
+            for (Plant plant: worldSimulator.getPlantInRange(getX(), getY(), 1)){
+                if(plant!=null){
+                    plant.eatPlant();
                     setHasEaten(true);
-                    if(!worldSimulator.isOccupied(g.getX(), g.getY())){
-                        moveAbsolute(g.getX(),g.getY());
+                    // if another animal is on the grass we can't move to it, but we can still eat it
+                    if(!worldSimulator.isOccupied(plant.getX(), plant.getY())){
+                        moveAbsolute(plant.getX(),plant.getY());
                         return true;
                     }
+                    return true;
                 }
             }
         }

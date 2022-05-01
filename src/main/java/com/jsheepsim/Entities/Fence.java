@@ -13,9 +13,11 @@ public class Fence extends Animal {
         super(new Identity(name,"entity"), arrPos, worldSimulator, new File("images/fence.png"), 60, false, 1000);
     }
 
+    // Override sim update so the fence doesn't die
     @Override
     public void simUpdate(){}
 
+    // it would be funny if I implemented this, but I won't because it's a fence.
     @Override
     protected Animal breed(Animal animal) {
         return null;

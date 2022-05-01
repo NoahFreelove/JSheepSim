@@ -10,6 +10,9 @@ import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.util.Scanner;
 
+/**
+ * Console class manages input via the console and calls the appropriate methods in the WorldSimulator class.
+ */
 public class Console {
     public boolean isRunning;
 
@@ -32,7 +35,9 @@ public class Console {
                 save: save a world to a file
                 gc: run the garbage collector
                 """;
-    public void console(){
+
+
+    public void startConsole(){
         System.out.println("Enter a command:");
         isRunning = true;
         while (isRunning){
@@ -47,6 +52,10 @@ public class Console {
         }
     }
 
+    /**
+     * Determine if the input is a valid command
+     * @param input the input string
+     */
     void processInput(String input){
         input = input.toLowerCase().trim();
 
@@ -70,6 +79,9 @@ public class Console {
         }
     }
 
+    /**
+     * Run the garbage collector and print the results
+     */
     void gc(){
         long beforeUsedMem=Runtime.getRuntime().totalMemory();
         System.gc();
@@ -78,6 +90,9 @@ public class Console {
         System.out.println("Freed " + savedMemory/1024/1024 + " MB");
     }
 
+    /**
+     * change the spectated world
+     */
     void changeWorldNum()
     {
         int worldNum = getWorldNum();
@@ -100,11 +115,11 @@ public class Console {
         if(worldNum != -1)
         {
             WorldSimulator ws = Main.worlds[worldNum];
-            Animal[] animalsAlive = ws.getWorldData().getAliveAnimals();
-            Animal[] sheepAlive = ws.getWorldData().getAllAnimalsOfClass(Sheep.class);
-            Animal[] wolvesAlive = ws.getWorldData().getAllAnimalsOfClass(Wolf.class);
-            Animal[] bunniesAlive = ws.getWorldData().getAllAnimalsOfClass(Bunny.class);
-            Animal[] bearsAlive = ws.getWorldData().getAllAnimalsOfClass(Bear.class);
+            Animal[] animalsAlive = ws.getAliveAnimals();
+            Animal[] sheepAlive = ws.getAllAnimalsOfClass(Sheep.class);
+            Animal[] wolvesAlive = ws.getAllAnimalsOfClass(Wolf.class);
+            Animal[] bunniesAlive = ws.getAllAnimalsOfClass(Bunny.class);
+            Animal[] bearsAlive = ws.getAllAnimalsOfClass(Bear.class);
 
             System.out.printf("World '%s' Status:%n", ws.getScene().getSceneName());
             System.out.printf("Day:%d%n", ws.getDay());

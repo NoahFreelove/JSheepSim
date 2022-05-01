@@ -14,6 +14,7 @@ public class Sheep extends Herbivore {
         super(new Identity(name, "animal"), arrPos, worldSimulator, new File("images/sheep.png"), 100, isChild, 1);
     }
 
+    // Add a new sheep to the world
     @Override
     public Animal breed(Animal animal) {
         setHasEaten(false);

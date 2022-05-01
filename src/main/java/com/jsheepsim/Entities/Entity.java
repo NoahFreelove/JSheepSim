@@ -10,15 +10,17 @@ import com.jsheepsim.Simulator.WorldSimulator;
 
 import java.io.File;
 
-public class Entity extends Pawn {
+public abstract class Entity extends Pawn {
     private String name;
     private Coord pos;
     protected File image;
     private boolean hasUpdated;
+    // When the entity is created it has a reference to the world it's placed in and it's settings
     protected final WorldSimulator worldSimulator;
     protected final WorldSettings worldSettings;
+
     public Entity(Transform transform, Identity identity, Coord arrPos, WorldSimulator wmRef, File imagePath) {
-        super(transform, new GameImage(imagePath.getAbsolutePath(),wmRef.getWorldData().getTileSize(),wmRef.getWorldData().getTileSize()), identity);
+        super(transform, new GameImage(imagePath.getAbsolutePath(),wmRef.getTileSize(),wmRef.getTileSize()), identity);
         this.name = identity.getName();
         this.pos = arrPos;
         this.worldSettings = wmRef.getWorldSettings();
@@ -26,13 +28,15 @@ public class Entity extends Pawn {
         this.image = imagePath;
     }
 
-    public void simUpdate(){
+    // Each entity has its own update method
+    public abstract void simUpdate();
 
-    }
+    // JEngine Update Method, called 60 times per second
     @Override
-    public void Update(){
-    }
+    public void Update(){}
 
+    //region Getters and Setters
+    // Default getters/setters
     public String getName() {
         return name;
     }
@@ -78,6 +82,5 @@ public class Entity extends Pawn {
     public WorldSimulator getWorldSimulator() {
         return worldSimulator;
     }
-
-
+    //endregion
 }

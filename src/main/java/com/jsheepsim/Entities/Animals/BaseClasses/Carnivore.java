@@ -12,24 +12,31 @@ public class Carnivore extends Animal {
         super(identity, arrPos, wmRef, imagePath, maxDaysToLive, isChild, foodChainLevel);
     }
 
+    // Let the subclasses of Carnivore implement their own breed method
     @Override
     protected Animal breed(Animal animal) {
         return null;
     }
 
     public boolean hunt() {
+        // If the world doesn't allow hunting, return false
         if(!worldSettings.allowHunting())
             return false;
-        if(isChild && !worldSettings.allowChildrenEatingAdults())
+        // If the animal is a child don't hunt unless allowed by the world settings
+        if(isChild && !worldSettings.allowChildrenHunting())
             return false;
 
-        for (Animal a:worldSimulator.getAnimalsInRange(getX(), getY(), 1)) {
-            if(a!=null && a!= this){
+        for (Animal prey:worldSimulator.getAnimalsInRange(getX(), getY(), 1)) {
+
+            if(prey!=null && prey!= this){
                 // Dont hunt friendlies and dont hunt stronger animals
-                if((a.getClass() != getClass() || worldSettings.allowEatingOwnSpecies()) && ((a.getFoodChainLevel() <= getFoodChainLevel()) || worldSettings.ignoreFoodChainLevel())){
-                    a.attacked(this);
+                if((prey.getClass() != getClass() || worldSettings.allowEatingOwnSpecies()) && ((prey.getFoodChainLevel() <= getFoodChainLevel()) || worldSettings.ignoreFoodChainLevel())){
+                    // Attack the prey
+                    prey.attacked(this);
+                    // Eat the prey
                     setHasEaten(true);
-                    moveAbsolute(a.getX(),a.getY());
+                    // Move to the prey's position
+                    moveAbsolute(prey.getX(),prey.getY());
                     return true;
                 }
             }
