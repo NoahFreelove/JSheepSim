@@ -28,13 +28,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        setEnginePrefs(); // set engine info
+        setEngineSettings(); // set engine info
 
         // Create our simulator worlds
         // Sim name, World seed, XSize, YSize, TileSize, Ticks/Second
         WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,10);
         WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 24,24,32,3);
-        WorldSimulator sim3 = new WorldSimulator("Sim 3", 2, 8,8,32,2);
+        WorldSimulator sim3 = new WorldSimulator("Sim 3", 25, 16,16,32,2);
 
         // World array helps us keep track of our world instances
         worlds[0] = sim1;
@@ -42,7 +42,7 @@ public class Main extends Application {
         worlds[2] = sim3;
 
         // Start up the window
-        GameWindow window = new GameWindow(sim1.getScene(), 1,"SheepSim",stage);
+        GameWindow window = new GameWindow(sim1.getScene(), 1,"Sheep Simulator",stage);
         window.setTargetFPS(60);
 
         Text helpText = new Text(
@@ -57,6 +57,7 @@ public class Main extends Application {
                 F3 - Reset Sim
                 F4 - Step Sim
                 F5 - Reset Camera
+                MouseClick - Toggle Zoom
                 """
         );
         // Set text properties
@@ -64,10 +65,10 @@ public class Main extends Application {
         helpText.setStyle("-fx-font-weight: bold");
         helpText.setTranslateX(5);
         helpText.setTranslateY(10);
-
+        // Add to screen
         window.parent.getChildren().add(helpText);
 
-        // Init the camera
+        // Init the camera. When the camera is created and the window is not initialized, the camera will start the window automatically
         camera = new GameCamera(new Vector3(0,0,0), window, sim1.getScene(), null, new Identity("Main Camera", "camera"));
 
         pointer = new Pointer(null);
@@ -111,9 +112,9 @@ public class Main extends Application {
     }
 
     /**
-     * You can ignore this method, it's just used to set the engine preferences
+     * You can ignore this method, it's just used to set the engine settings
      */
-    private static void setEnginePrefs()
+    private static void setEngineSettings()
     {
         EnginePrefs.aggressiveGC = false;
         EnginePrefs.logDebug = false;
@@ -123,7 +124,7 @@ public class Main extends Application {
 
         GameInfo.appName = "Sheep Simulator";
         GameInfo.authors = new String[]{"Noah Freelove"};
-        GameInfo.appVersionMinor = 5;
+        GameInfo.appVersionMinor = 6;
         GameInfo.appVersionMajor = 1;
         GameInfo.buildID = "build 2022.05.01.1";
         GameInfo.year = 2022;

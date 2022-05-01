@@ -26,4 +26,9 @@ public class Plant extends Entity {
     public void simUpdate() {
         // Do nothing
     }
+
+    @Override
+    public String toString(){
+        return String.format("'%s' (Plant) at %s", getClass().getSimpleName(), getPosition());
+    }
 }

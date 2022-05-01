@@ -102,6 +102,10 @@ public class Console {
         }
     }
 
+    /**
+     * Output world stats for a specific world
+     * @param defaultNum
+     */
     void worldStatus(int defaultNum)
     {
         int worldNum;
@@ -131,16 +135,19 @@ public class Console {
         }
     }
 
+    // Get a world from file
     void loadWorld()
     {
         String fileName = getFileName();
         Main.worlds[Main.selectedWorld].loadFromFile(fileName);
     }
+    // Save a world to file
     void saveWorld(){
         String fileName = getFileName();
         Main.worlds[Main.selectedWorld].saveToFile(fileName);
     }
 
+    // get a world num from the user
     int getWorldNum(){
         System.out.print("Enter a world number: ");
         Scanner s = new Scanner(System.in);
@@ -156,6 +163,7 @@ public class Console {
         }
     }
 
+    // get a boolean answer from the user
     boolean getBoolean(){
         System.out.print("new true/false value: ");
         Scanner s = new Scanner(System.in);
@@ -163,6 +171,7 @@ public class Console {
         return s.nextBoolean();
     }
 
+    // get a double answer from the user
     double getDouble(){
         System.out.print("Enter new Value (>0): ");
         Scanner s = new Scanner(System.in);
@@ -178,6 +187,7 @@ public class Console {
         }
     }
 
+    // get a file name from the user
     String getFileName()
     {
         System.out.print("Enter a file name: ");
@@ -185,6 +195,7 @@ public class Console {
 
     }
 
+    // stop the console
     public void stop(){
         isRunning = false;
     }

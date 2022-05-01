@@ -83,4 +83,9 @@ public abstract class Entity extends Pawn {
         return worldSimulator;
     }
     //endregion
+
+    @Override
+    public String toString(){
+        return String.format("%s (Entity) at %s", getClass().getSimpleName(), pos);
+    }
 }
