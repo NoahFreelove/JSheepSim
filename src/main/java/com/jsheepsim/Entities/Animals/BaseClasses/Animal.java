@@ -1,8 +1,8 @@
 package com.jsheepsim.Entities.Animals.BaseClasses;
 
-import com.JEngine.PrimitiveTypes.Position.Transform;
-import com.JEngine.PrimitiveTypes.Position.Vector3;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
+import com.JEngine.Core.Position.Transform;
+import com.JEngine.Core.Position.Vector3;
+import com.JEngine.Core.Identity;
 import com.JEngine.Utility.GameMath;
 import com.jsheepsim.Entities.Entity;
 import com.jsheepsim.Simulator.Coord;

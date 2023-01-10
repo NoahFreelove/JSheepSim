@@ -3,11 +3,11 @@ package com.jsheepsim.Simulator;
 import com.JEngine.Game.Visual.GameCamera;
 import com.JEngine.Game.Visual.MousePointer;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
-import com.JEngine.PrimitiveTypes.FlipFlop;
-import com.JEngine.PrimitiveTypes.GameImage;
-import com.JEngine.PrimitiveTypes.Position.Direction;
-import com.JEngine.PrimitiveTypes.Position.Vector2;
-import com.JEngine.PrimitiveTypes.Position.Vector3;
+import com.JEngine.Core.FlipFlop;
+import com.JEngine.Core.GameImage;
+import com.JEngine.Core.Position.Direction;
+import com.JEngine.Core.Position.Vector2;
+import com.JEngine.Core.Position.Vector3;
 import com.JEngine.Utility.Input;
 import javafx.scene.input.KeyCode;
 
@@ -24,7 +24,7 @@ public class Pointer extends MousePointer {
 
     // When the mouse is pressed, change the zoom level between 1 and 2
     @Override
-    protected void onMouseReleased(){
+    protected void onMouseReleased(boolean l){
         if(flipFlop.getState())
         {
             SceneManager.getActiveCamera().setZoom(new Vector2(1,1));

@@ -2,9 +2,9 @@ package com.jsheepsim.Simulator;
 
 import com.JEngine.Game.Visual.Scenes.GameScene;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
-import com.JEngine.PrimitiveTypes.FlipFlop;
-import com.JEngine.PrimitiveTypes.Position.Vector2;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Thing;
+import com.JEngine.Core.FlipFlop;
+import com.JEngine.Core.Position.Vector2;
+import com.JEngine.Core.Thing;
 import com.jsheepsim.Entities.Animals.BaseClasses.Animal;
 import com.jsheepsim.Entities.Animals.Bunny;
 import com.jsheepsim.Entities.Plants.Plant;

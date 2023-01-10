@@ -3,8 +3,8 @@ package com.jsheepsim;
 import com.JEngine.Game.Visual.GameCamera;
 import com.JEngine.Game.Visual.GameWindow;
 import com.JEngine.Game.Visual.Scenes.SceneManager;
-import com.JEngine.PrimitiveTypes.Position.Vector3;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
+import com.JEngine.Core.Position.Vector3;
+import com.JEngine.Core.Identity;
 import com.JEngine.Utility.About.GameInfo;
 import com.JEngine.Utility.Misc.GameUtility;
 import com.JEngine.Utility.Settings.EnginePrefs;
@@ -34,7 +34,7 @@ public class Main extends Application {
         // Sim name, World seed, XSize, YSize, TileSize, Ticks/Second
         WorldSimulator sim1 = new WorldSimulator("Sim 1", 0, 16,16,32,10);
         WorldSimulator sim2 = new WorldSimulator("Sim 2", 5, 24,24,32,3);
-        WorldSimulator sim3 = new WorldSimulator("Sim 3", 25, 16,16,32,2);
+        WorldSimulator sim3 = new WorldSimulator("Sim 3", 25, 32,32,32,2);
 
         // World array helps us keep track of our world instances
         worlds[0] = sim1;
@@ -122,12 +122,12 @@ public class Main extends Application {
         EnginePrefs.logImportant = true;
         EnginePrefs.logInfo = true;
 
-        GameInfo.appName = "Sheep Simulator";
+        /*GameInfo.appName = "Sheep Simulator";
         GameInfo.authors = new String[]{"Noah Freelove"};
         GameInfo.appVersionMinor = 6;
         GameInfo.appVersionMajor = 1;
         GameInfo.buildID = "build 2022.05.01.1";
-        GameInfo.year = 2022;
+        GameInfo.year = 2022;*/
 
         GameInfo.logGameInfo(false);
     }

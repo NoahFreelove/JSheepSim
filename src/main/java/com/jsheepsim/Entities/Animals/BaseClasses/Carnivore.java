@@ -1,6 +1,6 @@
 package com.jsheepsim.Entities.Animals.BaseClasses;
 
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
+import com.JEngine.Core.Identity;
 import com.jsheepsim.Simulator.Coord;
 import com.jsheepsim.Simulator.WorldSimulator;
 

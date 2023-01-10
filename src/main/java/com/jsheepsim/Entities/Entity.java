@@ -1,9 +1,9 @@
 package com.jsheepsim.Entities;
 
 import com.JEngine.Game.PlayersAndPawns.Pawn;
-import com.JEngine.PrimitiveTypes.GameImage;
-import com.JEngine.PrimitiveTypes.Position.Transform;
-import com.JEngine.PrimitiveTypes.VeryPrimitiveTypes.Identity;
+import com.JEngine.Core.GameImage;
+import com.JEngine.Core.Position.Transform;
+import com.JEngine.Core.Identity;
 import com.jsheepsim.Simulator.Coord;
 import com.jsheepsim.Simulator.WorldSettings;
 import com.jsheepsim.Simulator.WorldSimulator;
